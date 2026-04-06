@@ -60,7 +60,7 @@ The flash dialog uses an explicit whitelist of recognised files. Only the files 
 
 | File | Flash address | Notes |
 |---|---|---|
-| `sketch.ino.bin` | `0x10000` | Main application binary |
+| `{application}.ino.bin` | `0x10000` | Main application binary (e.g. `Hardware-Registration-and-Configuration.ino.bin`) |
 | `*.bootloader.bin` | `0x01000` | ESP32 bootloader |
 | `*.partitions.bin` | `0x08000` | Partition table |
 
