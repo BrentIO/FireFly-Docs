@@ -54,31 +54,38 @@ Clicking the button opens the flash dialog, which:
 
 ### Flash Address Mapping
 
-Each binary file is written to the correct address before flashing begins.
+The flash dialog uses an explicit whitelist of recognised files. Only the files listed below are ever shown in the dialog or written to the device. Any other `.bin` file present in the ZIP — such as `sketch.ino.merged.bin` produced by ESP-IDF ≥ 3.3.7 — is silently ignored. This prevents new build artifacts from being flashed unintentionally when the ESP toolchain adds files to its output.
 
-**Fixed addresses** — defined by the ESP32 architecture and the same on every board:
+**Fixed addresses** — defined by the ESP32 architecture; these do not appear in the partition table binary:
 
-| File pattern | Flash address | Notes |
+| File | Flash address | Notes |
 |---|---|---|
 | `*.bootloader.bin` | `0x01000` | ESP32 bootloader |
 | `*.partitions.bin` | `0x08000` | Partition table |
-| `*.bin` (application) | `0x10000` | Standard `app0` offset |
 
 **Dynamic addresses** — resolved from the `partition_offsets` map stored in the firmware's DynamoDB record:
 
 | File | Partition name | Notes |
 |---|---|---|
-| `config.bin` | `config` | Offset stored at ingestion time |
+| `{application}.ino.bin` | `app0` | Main application binary (e.g. `Hardware-Registration-and-Configuration.ino.bin`) |
 | `www.bin` | `www` | Offset stored at ingestion time |
+| `config.bin` | `config` | Offset stored at ingestion time |
 
 When `func-s3-firmware-uploaded` processes a ZIP, it parses `partitions.bin` as a sequence of 32-byte ESP32 partition table entries (magic `0xAA50`) and stores the resulting name → offset map in the DynamoDB record as `partition_offsets`. The browser reads this field directly from the firmware record — no ZIP download is required just to determine flash addresses. This means the correct address is used automatically regardless of flash size or hardware revision, and no code changes are required when the partition layout changes.
 
-**Skipped files** — non-`.bin` files are never flashed:
+**Excluded from display** — these file types are shown in the dialog as skipped (not flashed):
 
 | Pattern | Reason |
 |---|---|
 | `*.elf`, `*.map` | Debug symbols — not needed on device |
 | `manifest.json` | Upload metadata — not a flashable binary |
+
+**Silently ignored** — these files are not shown in the dialog at all:
+
+| Pattern | Reason |
+|---|---|
+| `*.merged.bin` (e.g. `sketch.ino.merged.bin`) | Combined image produced by ESP-IDF ≥ 3.3.7 — individual part files are flashed instead |
+| Any other unrecognised `.bin` | Not part of the known flash layout |
 
 ### Erase All Flash
 

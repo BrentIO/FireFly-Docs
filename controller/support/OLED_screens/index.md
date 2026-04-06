@@ -7,9 +7,9 @@ A scrollbar is show on the right side of the display indicating where the user i
 
 
 ## Sequence Flow
-[![Sequence Diagram](./images/sequence.drawio.svg)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/support/OLED_screens/images/sequence.drawio.svg)
+[![Sequence Diagram](./images/sequence.drawio.svg)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/support/OLED_screens/images/sequence.drawio.svg)
 
-[draw.io source file](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/support/OLED_screens/sequence.drawio)
+[draw.io source file](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/support/OLED_screens/sequence.drawio)
 
 ## Logo
 Displays until the controller has booted.
@@ -95,6 +95,11 @@ Errors are displayed with the newest error on the bottom of the screen.
 The software application name and version are displayed.  There are some [abbreviations](/controller/support/abbreviations) and [failure reason codes](/controller/support/failure_reason_codes) which can be shown.
 
 ![Error](./images/error.svg)
+
+## HW/FW Mismatch
+If the firmware’s product hex does not match the hardware’s product hex stored in NVS, the system will display an error and halt the boot process.
+
+![HW/FW Mismatch](./images/hw_fw_mismatch.svg)
 
 
 ## Auth Token
