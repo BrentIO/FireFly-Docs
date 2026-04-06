@@ -42,6 +42,10 @@ export default defineConfig({
                         link: '/controller/hardware/FFC0806_2305/'
                       },
                       {
+                        text: 'FFC3232-2603',
+                        link: '/controller/hardware/FFC3232_2603/'
+                      },
+                      {
                         text: 'FFC3232-2505',
                         link: '/controller/hardware/FFC3232_2505/'
                       },
