@@ -56,11 +56,10 @@ Clicking the button opens the flash dialog, which:
 
 The flash dialog uses an explicit whitelist of recognised files. Only the files listed below are ever shown in the dialog or written to the device. Any other `.bin` file present in the ZIP — such as `sketch.ino.merged.bin` produced by ESP-IDF ≥ 3.3.7 — is silently ignored. This prevents new build artifacts from being flashed unintentionally when the ESP toolchain adds files to its output.
 
-**Fixed addresses** — defined by the ESP32 architecture and the same on every board:
+**Fixed addresses** — defined by the ESP32 architecture; these do not appear in the partition table binary:
 
 | File | Flash address | Notes |
 |---|---|---|
-| `{application}.ino.bin` | `0x10000` | Main application binary (e.g. `Hardware-Registration-and-Configuration.ino.bin`) |
 | `*.bootloader.bin` | `0x01000` | ESP32 bootloader |
 | `*.partitions.bin` | `0x08000` | Partition table |
 
@@ -68,6 +67,7 @@ The flash dialog uses an explicit whitelist of recognised files. Only the files 
 
 | File | Partition name | Notes |
 |---|---|---|
+| `{application}.ino.bin` | `app0` | Main application binary (e.g. `Hardware-Registration-and-Configuration.ino.bin`) |
 | `www.bin` | `www` | Offset stored at ingestion time |
 | `config.bin` | `config` | Offset stored at ingestion time |
 
