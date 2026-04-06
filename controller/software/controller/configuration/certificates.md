@@ -1,6 +1,6 @@
 # Configuration: Certificates
 
-Certificates are required when the OTA server uses HTTPS.  Multiple certificates can be uploaded, however, only one certificate can be configured to be used for OTA.  Forced OTA updates can specify a different certificate if necessary.
+By default, HTTPS OTA validation uses the ESP32 core's built-in Mozilla root CA bundle (~130 CAs, maintained by Espressif and updated with each firmware build).  If you upload one or more certificates here, those uploaded certificates are used exclusively for OTA validation instead of the built-in bundle.  If your OTA server requires a CA not in the Mozilla bundle, upload that root CA here.
 
 See more information about [certificate management](/controller/support/certificate_management).
 

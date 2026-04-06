@@ -1,5 +1,5 @@
 # Certificate Management
-Certificates must be managed directly with the device specifically due to the processing limitations of the microcontroller.  Unlike a computer's operating system, which ships with all the Root Certificate Authorities (Root CA's) required to browse the internet, the microcontroller does not.  Due to limited storage space, only the required certificates can be loaded onto the device.
+By default, HTTPS OTA validation uses the ESP32 core's built-in Mozilla root CA bundle (~130 CAs, maintained by Espressif).  If you upload one or more certificates, those uploaded certificates are used exclusively for OTA validation instead of the built-in bundle.  Upload a root CA here only if your OTA server uses a certificate authority not covered by the Mozilla bundle.
 
 Certificates are stored in the [`config` partition](/controller/support/partitions).
 
@@ -236,6 +236,6 @@ To add a certificate, go to the controller's IP address (which can be obtained f
 > Storage space on the config partition is very limited.  Only upload the root CA's required for your operation.
 
 ## Updating and Deleting Certificates
-OTA configurations are not checked to ensure that a certificate continues to exist when you delete a certificate.  The [OTA Update Service](ota_updates.md) should be checked to ensure that the required certificate (if defined) still exists, or is configured to the updated certificate.
+When a certificate is deleted, the cert bundle is automatically rebuilt from the remaining uploaded certificates plus the built-in root CAs.  OTA will continue to function as long as at least the built-in root CAs cover your OTA server.
 
-Configurations cannot be updated, only deleted and changes saved.
+Configurations cannot be updated, only deleted and re-uploaded.
