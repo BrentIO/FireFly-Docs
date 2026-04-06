@@ -1,6 +1,6 @@
 # Configuration: Certificates
 
-The firmware includes built-in root CAs (Amazon Root CA 1 and Starfield Services Root CA - G2) that cover most HTTPS OTA servers out of the box.  Additional certificates can be uploaded here if your OTA server uses a different certificate authority.  All uploaded certificates are combined with the built-in root CAs into a single bundle used for all HTTPS OTA validation.
+By default, HTTPS OTA validation uses the ESP32 core's built-in Mozilla root CA bundle (~130 CAs, maintained by Espressif and updated with each firmware build).  If you upload one or more certificates here, those uploaded certificates are used exclusively for OTA validation instead of the built-in bundle.  If your OTA server requires a CA not in the Mozilla bundle, upload that root CA here.
 
 See more information about [certificate management](/controller/support/certificate_management).
 

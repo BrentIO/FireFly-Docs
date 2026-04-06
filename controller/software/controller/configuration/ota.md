@@ -4,7 +4,7 @@ Controllers and <Badge type="warning" text="TODO" /> Clients can have their firm
 
 If `OTA Disabled` is checked, no OTA configuration is sent for that device type.
 
-Both `http` and `https` URLs are supported.  When `https` is used, the firmware validates the server certificate against a built-in bundle of root CAs (Amazon Root CA 1 and Starfield Services Root CA - G2) plus any certificates you have uploaded to the device.  No separate certificate selection is required.
+Both `http` and `https` URLs are supported.  When `https` is used, the firmware validates the server certificate using the ESP32 core's built-in Mozilla root CA bundle by default.  If you have uploaded any certificates to the device, those are used instead of the built-in bundle.  No separate certificate selection is required.
 
 You can configure the URL to include wildcards, which will be substituted at execution time.  The underlying library will URL encode as necessary.
 
