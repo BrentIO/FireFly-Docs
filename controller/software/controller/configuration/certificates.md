@@ -1,6 +1,6 @@
 # Configuration: Certificates
 
-Certificates are required when the OTA server uses HTTPS.  Multiple certificates can be uploaded, however, only one certificate can be configured to be used for OTA.  Forced OTA updates can specify a different certificate if necessary.
+The firmware includes built-in root CAs (Amazon Root CA 1 and Starfield Services Root CA - G2) that cover most HTTPS OTA servers out of the box.  Additional certificates can be uploaded here if your OTA server uses a different certificate authority.  All uploaded certificates are combined with the built-in root CAs into a single bundle used for all HTTPS OTA validation.
 
 See more information about [certificate management](/controller/support/certificate_management).
 

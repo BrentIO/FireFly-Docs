@@ -11,7 +11,7 @@ While the device is performing any type of OTA update, the [OLED display](/contr
 By default, updates are checked once every 86,400 seconds (daily) at approximately the time the device was originally booted, although the frequency can be overridden with the `FIRMWARE_CHECK_SECONDS` parameter if you compile the code yourself.
 
 ## OTA Update Service
-The OTA Update Service allows you to configure a webserver that will provide OTA updates to the device.  By default, the controller will check for OTA updates once per day and 30 seconds after a reboot.  Both http and https protocols are supported, provided a certificate for the website has been uploaded to the [certificates storage](/controller/support/certificate_management).
+The OTA Update Service allows you to configure a webserver that will provide OTA updates to the device.  By default, the controller will check for OTA updates once per day and 30 seconds after a reboot.  Both http and https protocols are supported.  When https is used, the firmware validates the server certificate against a built-in bundle of root CAs (Amazon Root CA 1 and Starfield Services Root CA - G2) plus any certificates you have uploaded to the device.  No separate certificate configuration is required for servers that use these root CAs.
 
 The OTA Update Service configuration is stored in the device's configuration as an entry in the JSON.  It can be configured using the [Controller's UI](/controller/software/controller/configuration/ota).
 
@@ -58,4 +58,4 @@ Combined application and LittleFS update
 ## Forced OTA Updates
 OTA updates can also be forced, which is helpful for ensuring a specific version of the firmware or LittleFS are downloaded.
 
-A different certificate can be uploaded and configured for forced OTA updates than for the OTA Update Service, if required.
+Forced OTA updates use the same built-in certificate bundle as the OTA Update Service.  No certificate field is required in the request payload.

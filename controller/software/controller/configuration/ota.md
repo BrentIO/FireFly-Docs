@@ -4,7 +4,7 @@ Controllers and <Badge type="warning" text="TODO" /> Clients can have their firm
 
 If `OTA Disabled` is checked, no OTA configuration is sent for that device type.
 
-If `https` is selected, you must first upload a [certificate](/controller/software/controller/configuration/certificates) in the UI before you will be able to save.  Only one certificate can be defined.  Certificates are automatically deployed when the configuration is pushed to a Controller.
+Both `http` and `https` URLs are supported.  When `https` is used, the firmware validates the server certificate against a built-in bundle of root CAs (Amazon Root CA 1 and Starfield Services Root CA - G2) plus any certificates you have uploaded to the device.  No separate certificate selection is required.
 
 You can configure the URL to include wildcards, which will be substituted at execution time.  The underlying library will URL encode as necessary.
 
