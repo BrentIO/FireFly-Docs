@@ -171,7 +171,7 @@ Example File Contents:
 	"buildPreferences": [
 		[
 			"build.extra_flags",
-			"-DPRODUCT_HEX=0x08062305 -DESP32 -DCORE_DEBUG_LEVEL=3 -DDISABLE_ALL_LIBRARY_WARNINGS -I~/GitHub/P5Software/FireFly-Controller"
+			"-DASYNCWEBSERVER_REGEX -DPRODUCT_HEX=0x08062305 -DESP32 -DCORE_DEBUG_LEVEL=3 -DDISABLE_ALL_LIBRARY_WARNINGS -I~/GitHub/P5Software/FireFly-Controller"
 		]
 	],
 	"port": "/dev/tty.SLAB_USBtoUART",
@@ -186,6 +186,8 @@ Defines the custom board configured in the Custom Boards section, above:
 
 
 #### build.extra_flags
+**`ASYNCWEBSERVER_REGEX`** Enables regex path matching in the async web server. Required for the URL routing patterns used throughout the application; must be set as a compile flag (not just a header define) so the library's own source files are also compiled with regex support enabled.
+
 **`PRODUCT_HEX`** This configuration indicates the hardware product ID expressed as a hexadecimal and is required. If it is not included, the compiler will trigger an error. Change the `0x08062305` value in the example shown above to match the actual hardware product ID, with `0x` prefixed. This allows for a product ID beginning with zero.
 
 **`ESP32`** The hardware type must also be set for the Adafruit libraries to be configured correctly. Use `-DESP32` flag to set the hardware to ESP32. Without it, you can expect to receive errors such as ```fatal error: util/delay.h: No such file or directory```
