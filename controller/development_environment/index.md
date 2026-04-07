@@ -106,7 +106,7 @@ Download each library below as a zip file or download from GitHub.
 | BrentIO_esp32FOTA | 2026.4.1 | https://github.com/BrentIO/esp32FOTA |
 | BrentIO_PCA95x5 | 2023.10.2 | https://github.com/BrentIO/PCA95x5 |
 | BrentIO_PCT2075 | 2023.10.3 | https://github.com/BrentIO/PCT2075 |
-| BrentIO_PubSubClient | 2025.4.1 | https://github.com/BrentIO/pubsubclient |
+| TBPubSubClient | v2.12.1 | https://github.com/thingsboard/pubsubclient |
 | Ethernet | 2.0.2 | https://github.com/arduino-libraries/Ethernet |
 | LinkedList | 1.3.3 | https://github.com/ivanseidel/LinkedList |
 | NTPClient | 3.2.1 | https://github.com/arduino-libraries/NTPClient |
@@ -387,7 +387,7 @@ RUN for H in /github/home /home/runner; do \
       HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/esp32FOTA.git#2026.4.1 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/PCA95x5.git#2023.10.2 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/PCT2075.git#2023.10.3 && \
-      HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/pubsubclient.git#2025.4.1 && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/thingsboard/pubsubclient.git#v2.12.1 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/arduino-libraries/Ethernet.git#2.0.2 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/ivanseidel/LinkedList.git#v1.3.3 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/arduino-libraries/NTPClient.git#3.2.1 && \
