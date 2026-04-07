@@ -20,6 +20,26 @@ Parameters:
 
 Resources:
 
+  DocsUriRewriteFunction:
+    Type: AWS::CloudFront::Function
+    Properties:
+      Name: firefly-docs-uri-rewrite
+      AutoPublish: true
+      FunctionConfig:
+        Comment: Rewrite clean URLs to their index.html S3 object paths
+        Runtime: cloudfront-js-2.0
+      FunctionCode: |
+        function handler(event) {
+            var request = event.request;
+            var uri = request.uri;
+            if (uri.endsWith('/')) {
+                request.uri += 'index.html';
+            } else if (!uri.split('/').pop().includes('.')) {
+                request.uri += '/index.html';
+            }
+            return request;
+        }
+
   DocsOriginAccessControl:
     Type: AWS::CloudFront::OriginAccessControl
     Properties:
@@ -55,6 +75,9 @@ Resources:
           MaxTTL: 0
           MinTTL: 0
           Compress: true
+          FunctionAssociations:
+            - EventType: viewer-request
+              FunctionARN: !GetAtt DocsUriRewriteFunction.FunctionArn
         DefaultRootObject: index.html
         CustomErrorResponses:
           - ErrorCode: 403
