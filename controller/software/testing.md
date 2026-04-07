@@ -54,9 +54,9 @@ The same interactive token prompt applies.
 After each run, two output locations are populated:
 
 - **Terminal** — live pass/fail output appears during the run
-- **HTML report** — a self-contained report is written to `tests/results/` in the repository:
-  - `tests/results/controller-report.html` — Controller suite results
-  - `tests/results/hw-reg-report.html` — Hardware Registration and Configuration suite results
+- **HTML report** — a self-contained report is written to `tests/results/` in the repository, with an epoch timestamp in the filename so successive runs do not overwrite each other:
+  - `tests/results/controller-<timestamp>.html` — Controller suite results
+  - `tests/results/hw-reg-<timestamp>.html` — Hardware Registration and Configuration suite results
 
 Open either file in any browser to review the results.
 
