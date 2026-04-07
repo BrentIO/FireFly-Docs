@@ -3,16 +3,16 @@ This guide covers core information about local testing for development.  Product
 
 ## Dockerfile for ACT
 
-The Dockerfile is maintained in the FireFly-Controller repository at [`.act/dockerfile`](https://github.com/BrentIO/FireFly-Controller/blob/main/.act/dockerfile). Build the image from the `.act/` directory:
+The Dockerfile is maintained in the FireFly-Controller repository at [`.act/dockerfile`](https://github.com/BrentIO/FireFly-Controller/blob/main/.act/dockerfile). Build the image from the **repo root** (not from `.act/`) so that `libraries.yaml` is available in the build context:
 
 Usage for Intel CPU: 
 ```bash
-docker build --no-cache --platform=linux/amd64 -t act-arduino-ubuntu-24-04:latest .
+docker build --no-cache --platform=linux/amd64 -t act-arduino-ubuntu-24-04:latest -f .act/dockerfile .
 ```
 
 Usage for Apple Silicon: 
 ```bash
-docker build --no-cache --platform=linux/arm64 -t act-arduino-ubuntu-24-04:latest .
+docker build --no-cache --platform=linux/arm64 -t act-arduino-ubuntu-24-04:latest -f .act/dockerfile .
 ```
 
 ## Configure ACT for Visual Studio Code
@@ -28,30 +28,28 @@ To run the ACT docker image through Visual Studio Code, use [GitHub Local Action
 | Options | container-architecture | `linux/amd64` | For Apple Intel chips |
 
 ## Library Versions
-The following library versions are used with this solution:
+The following library versions are used with this solution. This table is automatically updated on each production build from [`libraries.yaml`](https://github.com/BrentIO/FireFly-Controller/blob/main/libraries.yaml) in the FireFly-Controller repository.
 
-| Library | Version | URL |
-|---------|---------|-----|
-| Adafruit_BusIO | 1.17.4 | https://github.com/adafruit/Adafruit_BusIO |
-| Adafruit-GFX-Library | 1.12.5 | https://github.com/adafruit/Adafruit-GFX-Library |
-| Adafruit_SSD1306 | 2.5.16 | https://github.com/adafruit/Adafruit_SSD1306 |
-| ArduinoJson | 7.4.1 | https://github.com/bblanchon/ArduinoJson |
-| ArduinoStreamUtils | 1.9.2 | https://github.com/bblanchon/ArduinoStreamUtils |
-| AsyncTCP | 3.4.9 | https://github.com/ESP32Async/AsyncTCP |
-| ESPAsyncWebServer | 3.9.6 | https://github.com/ESP32Async/ESPAsyncWebServer |
-| BrentIO_esp32FOTA | 2026.4.1 | https://github.com/BrentIO/esp32FOTA |
-| BrentIO_PCA95x5 | 2023.10.2 | https://github.com/BrentIO/PCA95x5 |
-| BrentIO_PCT2075 | 2023.10.3 | https://github.com/BrentIO/PCT2075 |
-| TBPubSubClient | v2.12.1 | https://github.com/thingsboard/pubsubclient |
-| Ethernet | 2.0.2 | https://github.com/arduino-libraries/Ethernet |
-| LinkedList | 1.3.3 | https://github.com/ivanseidel/LinkedList |
-| NTPClient | 3.2.1 | https://github.com/arduino-libraries/NTPClient |
-| PCA9685_RT | 0.7.3 | https://github.com/RobTillaart/PCA9685_RT |
-| Regexp | 0.1.1 | https://github.com/nickgammon/Regexp |
-
-
-> [!INFO]  
-> Versions must also be changed in the GitHub actions.
+<!-- LIBRARY-TABLE-START -->
+| Library | Version |
+| ------- | ------- |
+| [Adafruit_BusIO](https://github.com/adafruit/Adafruit_BusIO) | 1.17.4 |
+| [Adafruit-GFX-Library](https://github.com/adafruit/Adafruit-GFX-Library) | 1.12.5 |
+| [Adafruit_SSD1306](https://github.com/adafruit/Adafruit_SSD1306) | 2.5.16 |
+| [ArduinoJson](https://github.com/bblanchon/ArduinoJson) | v7.4.1 |
+| [ArduinoStreamUtils](https://github.com/bblanchon/ArduinoStreamUtils) | v1.9.2 |
+| [AsyncTCP](https://github.com/ESP32Async/AsyncTCP) | v3.4.9 |
+| [BrentIO_esp32FOTA](https://github.com/BrentIO/esp32FOTA) | 2026.4.1 |
+| [BrentIO_PCA95x5](https://github.com/BrentIO/PCA95x5) | 2023.10.2 |
+| [BrentIO_PCT2075](https://github.com/BrentIO/PCT2075) | 2023.10.3 |
+| [ESPAsyncWebServer](https://github.com/ESP32Async/ESPAsyncWebServer) | v3.9.6 |
+| [Ethernet](https://github.com/arduino-libraries/Ethernet) | 2.0.2 |
+| [LinkedList](https://github.com/ivanseidel/LinkedList) | v1.3.3 |
+| [NTPClient](https://github.com/arduino-libraries/NTPClient) | 3.2.1 |
+| [PCA9685_RT](https://github.com/RobTillaart/PCA9685_RT) | 0.7.3 |
+| [Regexp](https://github.com/nickgammon/Regexp) | 0.1.1 |
+| [TBPubSubClient](https://github.com/thingsboard/pubsubclient) | v2.12.1 |
+<!-- LIBRARY-TABLE-END -->
 
 ## Symlink for boards.local.txt
 
