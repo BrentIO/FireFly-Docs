@@ -195,3 +195,29 @@ On Apple Silicon, Options setting `pull` = `false` is required.
 ::: info
 Be sure to set the Option `artifact-server-path` to a local directory to retrieve the binaries.
 :::
+
+## Repository Secrets
+
+The following secrets must be configured in the FireFly-Controller repository under **Settings → Secrets and variables → Actions** for CI workflows to function correctly.
+
+### `FIREFLY_DOCS_TOKEN`
+
+A fine-grained personal access token that allows the FireFly-Controller production CI workflow to automatically open a pull request on the FireFly-Docs repository when the library list changes.
+
+**To create the token:**
+
+1. Go to GitHub → **Settings** → **Developer settings** → **Personal access tokens** → **Fine-grained tokens**
+2. Click **Generate new token**
+3. Set the resource owner to `BrentIO`
+4. Under **Repository access**, select **Only select repositories** and choose `BrentIO/FireFly-Docs`
+5. Under **Permissions → Repository permissions**, grant:
+   - **Contents**: Read and write
+   - **Pull requests**: Read and write
+6. Generate the token and copy it immediately
+
+**To install the token:**
+
+1. Go to the FireFly-Controller repository → **Settings** → **Secrets and variables** → **Actions**
+2. Click **New repository secret**
+3. Name: `FIREFLY_DOCS_TOKEN`
+4. Value: paste the token generated above
