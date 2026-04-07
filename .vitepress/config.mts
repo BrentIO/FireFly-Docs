@@ -176,7 +176,11 @@ export default defineConfig({
                       },
                     ]
                   },
-                  { 
+                  {
+                    text: 'API Testing',
+                    link: '/controller/software/testing'
+                  },
+                  {
                     text: 'Download Firmware from GitHub',
                     link: 'https://github.com/BrentIO/FireFly-Controller/releases'
                   }
