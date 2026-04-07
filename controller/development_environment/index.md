@@ -1,98 +1,34 @@
 # Controller Development Environment
-This guide covers the tools and configuration required to build and test FireFly Controller firmware locally.
+This guide covers core information about local testing for development.  Production and test builds are built using GitHub actions.
 
-## Installing and Configuring arduino-cli
+## Dockerfile for ACT
 
-Using arduino-cli is more flexible and reliable than the IDE.
+The Dockerfile is maintained in the FireFly-Controller repository at [`.act/dockerfile`](https://github.com/BrentIO/FireFly-Controller/blob/main/.act/dockerfile). Build the image from the `.act/` directory:
 
-### Install Arduino CLI
-
-Instructions are available at https://arduino.github.io/arduino-cli/latest/. Essentially:
+Usage for Intel CPU: 
 ```bash
-brew update
-brew install arduino-cli
+docker build --no-cache --platform=linux/amd64 -t act-arduino-ubuntu-24-04:latest .
 ```
 
-### Post Installation
-
-Initialize the installation:
+Usage for Apple Silicon: 
 ```bash
-arduino-cli config init
+docker build --no-cache --platform=linux/arm64 -t act-arduino-ubuntu-24-04:latest .
 ```
 
+## Configure ACT for Visual Studio Code
 
-Enable unsafe installation so that local zip files can be installed:
-```bash
-arduino-cli config set library.enable_unsafe_install true
-```
+To run the ACT docker image through Visual Studio Code, use [GitHub Local Actions](https://marketplace.visualstudio.com/items?itemName=SanjulaGanepola.github-local-actions) plug-in for Visual Studio.  The following settings must be applied:
 
-### Updating Arduino CLI
+| Section | Setting | Value | Notes |
+| ------- | ------- | ----- | ----- |
+| Runners | ubuntu-24.04 | `act-arduino-ubuntu-24-04` | |
+| Options | artifact-server-path | `./artifacts` | |
+| Options | pull | `false` | |
+| Options | container-architecture | `linux/arm64` | For Apple Silicon only |
+| Options | container-architecture | `linux/amd64` | For Apple Intel chips |
 
-To update an existing installation of Arduino CLI:
-```bash
-brew update
-brew upgrade arduino-cli
-```
-
-
-## Installing and Updating ESP Core
-
-### Install
-
-Add the ESP32 board manager packages:
-```bash
-arduino-cli config set board_manager.additional_urls https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
-```
-
-Update the index:
-```bash
-arduino-cli core update-index
-```
-
-Install ESP32 core, version 3.3.7:
-```bash
-arduino-cli core install esp32:esp32@3.3.7
-```
-
-Verify the installation was successful, and optionally remove any other cores:
-```bash
-arduino-cli core list
-```
-
-Expect:
-
-
-| ID | Installed | Latest | Name |
-| --- | --- | --- | --- |
-| esp32:esp32 | 3.3.7 | 3.3.7 | esp32 |
-
-
-### Updating
- Uninstall the current ESP core:
- ```bash
- arduino-cli core uninstall esp32:esp32
- ```
-
-Specify the version number to upgrade the ESP to 3.3.7:
-```bash
-arduino-cli core install esp32:esp32@3.3.7
-```
-
-## Installing and Configuring Libraries
-Check the libraries to ensure no libraries are installed:
-```bash
-arduino-cli lib list
-```
-
-Expect:
-```
-No libraries installed.
-```
-If there are any installed libraries, uninstall them before proceeding.
-  
-
-#### Download required libraries
-Download each library below as a zip file or download from GitHub.
+## Library Versions
+The following library versions are used with this solution:
 
 | Library | Version | URL |
 |---------|---------|-----|
@@ -113,15 +49,11 @@ Download each library below as a zip file or download from GitHub.
 | PCA9685_RT | 0.7.3 | https://github.com/RobTillaart/PCA9685_RT |
 | Regexp | 0.1.1 | https://github.com/nickgammon/Regexp |
 
-Install each library above using the following command:
-```bash
-arduino-cli lib install --zip-path /my/downloads/directory/library_name.zip
-```
 
 > [!INFO]  
 > Versions must also be changed in the GitHub actions.
 
-## Add Symlink for boards.local.txt
+## Symlink for boards.local.txt
 
 The `boards.local.txt` file must be placed adjacent to the other `boards.txt` file provided by the ESP32 core. It is generated from `boards.local.txt.template` at CI build time, but for local development you must create it manually first.
 
@@ -178,31 +110,15 @@ Peripheral information and build metadata are defined in `devices.yaml` at the r
 
 The Controller [filters large JSON documents](./configuration_json_filtering.md) in order to conserve memory and protect future upgradeability.
 
-## Dockerfile for ACT
-
-The Dockerfile is maintained in the FireFly-Controller repository at [`.act/dockerfile`](https://github.com/BrentIO/FireFly-Controller/blob/main/.act/dockerfile). Build the image from the `.act/` directory:
-
-Usage for Intel CPU: `docker build --no-cache --platform=linux/amd64 -t act-arduino-ubuntu-24-04:latest .`
-
-Usage for Apple Silicon: `docker build --no-cache --platform=linux/arm64 -t act-arduino-ubuntu-24-04:latest .`
-
-::: info
-Be sure to map runner setting `ubuntu-24.04` = `act-arduino-ubuntu-24-04`
-
-On Apple Silicon, Options setting `pull` = `false` is required.
-:::
-
-::: info
-Be sure to set the Option `artifact-server-path` to a local directory to retrieve the binaries.
-:::
-
 ## Repository Secrets
 
-The following secrets must be configured in the FireFly-Controller repository under **Settings → Secrets and variables → Actions** for CI workflows to function correctly.
+Some CI workflows require secrets to be configured across repositories. Each secret is created once as a personal access token and then installed into the repository whose CI workflow uses it.
 
 ### `FIREFLY_DOCS_TOKEN`
 
-A fine-grained personal access token that allows the FireFly-Controller production CI workflow to automatically open a pull request on the FireFly-Docs repository when the library list changes.
+**Installed in:** `BrentIO/FireFly-Controller` → Settings → Environments → **production** → Environment secrets
+
+**Purpose:** Allows the FireFly-Controller production CI workflow to automatically open a pull request on `BrentIO/FireFly-Docs` when the library list changes.
 
 **To create the token:**
 
@@ -215,9 +131,9 @@ A fine-grained personal access token that allows the FireFly-Controller producti
    - **Pull requests**: Read and write
 6. Generate the token and copy it immediately
 
-**To install the token:**
+**To install the token in `BrentIO/FireFly-Controller`:**
 
-1. Go to the FireFly-Controller repository → **Settings** → **Secrets and variables** → **Actions**
-2. Click **New repository secret**
+1. Go to `BrentIO/FireFly-Controller` → **Settings** → **Environments** → **production**
+2. Under **Environment secrets**, click **Add secret**
 3. Name: `FIREFLY_DOCS_TOKEN`
 4. Value: paste the token generated above
