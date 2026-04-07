@@ -16,7 +16,7 @@ Automated REST API test suites are available for both the Controller and Hardwar
 The test image is shared between both suites and only needs to be built once.  From the root of the `FireFly-Controller` repository:
 
 ```bash
-docker compose -f tests/docker-compose.yml build
+docker compose -f tests/docker-compose.yaml build
 ```
 
 Rebuild the image any time `tests/requirements.txt` or `tests/Dockerfile` changes.
@@ -24,7 +24,7 @@ Rebuild the image any time `tests/requirements.txt` or `tests/Dockerfile` change
 ## Running the Controller Test Suite
 
 ```bash
-DEVICE_IP=<device-ip> docker compose -f tests/docker-compose.yml run controller
+DEVICE_IP=<device-ip> docker compose -f tests/docker-compose.yaml run controller
 ```
 
 The test runner will start and prompt you to enter the Visual Token displayed on the device's OLED screen:
@@ -38,7 +38,7 @@ Look at the device display, type the token, and press Enter.  The token is promo
 ## Running the Hardware Registration and Configuration Test Suite
 
 ```bash
-DEVICE_IP=<device-ip> docker compose -f tests/docker-compose.yml run hw-reg
+DEVICE_IP=<device-ip> docker compose -f tests/docker-compose.yaml run hw-reg
 ```
 
 The same interactive token prompt applies.
@@ -65,5 +65,5 @@ Open either file in any browser to review the results.
 When testing against a firmware built with `CORE_DEBUG_LEVEL=4`, authentication is bypassed by the device.  Pass `NO_AUTH=true` to skip the token prompt:
 
 ```bash
-DEVICE_IP=<device-ip> NO_AUTH=true docker compose -f tests/docker-compose.yml run controller
+DEVICE_IP=<device-ip> NO_AUTH=true docker compose -f tests/docker-compose.yaml run controller
 ```
