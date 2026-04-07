@@ -106,7 +106,7 @@ Download each library below as a zip file or download from GitHub.
 | BrentIO_esp32FOTA | 2026.4.1 | https://github.com/BrentIO/esp32FOTA |
 | BrentIO_PCA95x5 | 2023.10.2 | https://github.com/BrentIO/PCA95x5 |
 | BrentIO_PCT2075 | 2023.10.3 | https://github.com/BrentIO/PCT2075 |
-| BrentIO_PubSubClient | 2025.4.1 | https://github.com/BrentIO/pubsubclient |
+| TBPubSubClient | v2.12.1 | https://github.com/thingsboard/pubsubclient |
 | Ethernet | 2.0.2 | https://github.com/arduino-libraries/Ethernet |
 | LinkedList | 1.3.3 | https://github.com/ivanseidel/LinkedList |
 | NTPClient | 3.2.1 | https://github.com/arduino-libraries/NTPClient |
