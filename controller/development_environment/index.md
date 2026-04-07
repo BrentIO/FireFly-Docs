@@ -123,22 +123,25 @@ arduino-cli lib install --zip-path /my/downloads/directory/library_name.zip
 
 ## Add Symlink for boards.local.txt
 
-The boards.local.txt file must be placed adjacent to the other boards.txt file provided by ESP32 core.
+The `boards.local.txt` file must be placed adjacent to the other `boards.txt` file provided by the ESP32 core. It is generated from `boards.local.txt.template` at CI build time, but for local development you must create it manually first.
 
-Steps:
+1. Generate `boards.local.txt` from the template, substituting the bootloader address and app partition size for your target hardware (values are in `devices.yaml`):
+```bash
+sed \
+  -e "s|{{BOOTLOADER_ADDR}}|0x1000|g" \
+  -e "s|{{APP_PARTITION_MAX_SIZE}}|6553600|g" \
+  ./FireFly-Controller/boards.local.txt.template \
+  > ./FireFly-Controller/boards.local.txt
+```
 
-1. Close Visual Studio Code
+2. Close Visual Studio Code.
 
-2. Create a symlink adjacent to the main boards file. Example for ESP Core version 3.3.7:
+3. Create a symlink adjacent to the main boards file. Example for ESP Core version 3.3.7:
 ```bash
 ln -s ./FireFly-Controller/boards.local.txt ~/Library/Arduino15/packages/esp32/hardware/esp32/3.3.7/boards.local.txt
 ```
 
-3. Open Visual Studio Code. Select the board labeled `ESP32 Wrover Module` and select the 16MB partition scheme.  This will allow the solution to compile.  However, the partitions will not be respected and may inaccurately reflect the amount of space remaining.
-
-4. For new boards only, ensure the option `Hardware-Registration-and-Configuration` is set to `Enabled`. Subsequent flashes of that chip should be set to `Disabled`.
-
-5. Flash the Hardware-Registration-and-Configuration.ino project.
+4. Open Visual Studio Code.
 
 
 ## Visual Studio IDE Configuration
@@ -236,49 +239,16 @@ If the upload function does not work, but the application compiles correctly, re
 
 
 ## Partitions
-FireFly Controller uses  a custom partition, `partitions.csv`, adjacent to the .ino file.
 
-See more information about [partitions](/controller/support/partitions).
+Each hardware model has its own partition layout defined in `devices.yaml`. The `partitions.csv` file is generated automatically at CI build time — there is no static file committed to the repository.
 
-
-#### Flashing `www` partition with 16MB Chip
-
-Size (see table above) = `0x2E0000`.  To create the image:
-
-```bash
-~/Library/Arduino15/packages/esp32/tools/mklittlefs/3.0.0-gnu12-dc7f933/mklittlefs -s 0x2E0000 -c ~/GitHub/P5Software/FireFly-Controller/Hardware-Registration-and-Configuration/www ~/GitHub/P5Software/FireFly-Controller/Hardware-Registration-and-Configuration/www.bin
-```
-
-
-Location (see table above) = `0xD10000`.  To flash the image:
-
-```bash
-~/Library/Arduino15/packages/esp32/tools/esptool_py/4.5.1/esptool --chip esp32 --port "/dev/tty.SLAB_USBtoUART" --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size 16MB 0xD10000 ~/GitHub/P5Software/FireFly-Controller/Hardware-Registration-and-Configuration/www.bin
-```
-
-
-#### Flashing `config` partition with 16MB Chip
-
-::: danger DATA LOSS MAY OCCUR
-This will destory any user-defined configuration!
-:::
-
-Size (see table above) = `0x80000`.  To create the image:
-
-```bash
-~/Library/Arduino15/packages/esp32/tools/mklittlefs/3.0.0-gnu12-dc7f933/mklittlefs -s 0x80000 -c ~/GitHub/P5Software/FireFly-Controller/Hardware-Registration-and-Configuration/config ~/GitHub/P5Software/FireFly-Controller/Hardware-Registration-and-Configuration/config.bin
-```
-
-Location (see table above) = `0xC90000`.  To flash the image:
-
-```bash
-~/Library/Arduino15/packages/esp32/tools/esptool_py/4.5.1/esptool --chip esp32 --port "/dev/tty.SLAB_USBtoUART" --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size 16MB 0xC90000 ~/GitHub/P5Software/FireFly-Controller/Hardware-Registration-and-Configuration/config.bin
-```
+See [Partitions](/controller/support/partitions) for the full partition layout and details on how the table is generated.
 
 ## Adding a new hardware version
-Hardware configurationsk are abstracted from the main applications to allow for compilation with minimal hardware-specific design considerations.  Each hardware model is defined in `hardware.h`.
 
-Additionally, the peripheral information must be added to `devices.yaml` at the repository root.  Adding the product HEX, product ID, `inputs_count`, and `outputs_count` to `devices.yaml` will add it to the Product ID drop down in the Identification area of the configuration, and will include it in the CI build matrix if its status is `ACTIVE`.
+Hardware configurations are abstracted from the main applications to allow for compilation with minimal hardware-specific design considerations. Each hardware model's pin mappings and hardware constants are defined in `hardware.h`.
+
+Peripheral information and build metadata are defined in `devices.yaml` at the repository root. Adding the product HEX, product ID, `inputs_count`, `outputs_count`, `bootloader_addr`, and `partition_scheme` to `devices.yaml` will include the model in the CI build matrix when its status is `ACTIVE`, and will populate the Product ID drop-down in the Hardware Registration and Configuration application.
 
 ## Filter Large JSON documents
 
