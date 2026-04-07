@@ -35,7 +35,7 @@ Resources:
             if (uri.endsWith('/')) {
                 request.uri += 'index.html';
             } else if (!uri.split('/').pop().includes('.')) {
-                request.uri += '/index.html';
+                request.uri += '.html';
             }
             return request;
         }
@@ -83,9 +83,11 @@ Resources:
           - ErrorCode: 403
             ResponseCode: 200
             ResponsePagePath: /index.html
+            ErrorCachingMinTTL: 0
           - ErrorCode: 404
             ResponseCode: 200
             ResponsePagePath: /index.html
+            ErrorCachingMinTTL: 0
         ViewerCertificate:
           AcmCertificateArn: !Ref CertificateArn
           SslSupportMethod: sni-only
