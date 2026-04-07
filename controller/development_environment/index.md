@@ -1,5 +1,5 @@
 # Controller Development Environment
-This guide will explain how to install and configure VSCode for use with arduino-cli. It assumes the Arduino plug-in has already been installed in VSCode.
+This guide covers the tools and configuration required to build and test FireFly Controller firmware locally.
 
 ## Installing and Configuring arduino-cli
 
@@ -123,76 +123,34 @@ arduino-cli lib install --zip-path /my/downloads/directory/library_name.zip
 
 ## Add Symlink for boards.local.txt
 
-The boards.local.txt file must be placed adjacent to the other boards.txt file provided by ESP32 core.
+The `boards.local.txt` file must be placed adjacent to the other `boards.txt` file provided by the ESP32 core. It is generated from `boards.local.txt.template` at CI build time, but for local development you must create it manually first.
 
-Steps:
-
-1. Close Visual Studio Code
+1. Generate `boards.local.txt` from the template, substituting the bootloader address and app partition size for your target hardware (values are in `devices.yaml`):
+```bash
+sed \
+  -e "s|{{BOOTLOADER_ADDR}}|0x1000|g" \
+  -e "s|{{APP_PARTITION_MAX_SIZE}}|6553600|g" \
+  ./FireFly-Controller/boards.local.txt.template \
+  > ./FireFly-Controller/boards.local.txt
+```
 
 2. Create a symlink adjacent to the main boards file. Example for ESP Core version 3.3.7:
 ```bash
 ln -s ./FireFly-Controller/boards.local.txt ~/Library/Arduino15/packages/esp32/hardware/esp32/3.3.7/boards.local.txt
 ```
 
-3. Open Visual Studio Code. Select the board labeled `ESP32 Wrover Module` and select the 16MB partition scheme.  This will allow the solution to compile.  However, the partitions will not be respected and may inaccurately reflect the amount of space remaining.
 
-4. For new boards only, ensure the option `Hardware-Registration-and-Configuration` is set to `Enabled`. Subsequent flashes of that chip should be set to `Disabled`.
+## Compile Flags
 
-5. Flash the Hardware-Registration-and-Configuration.ino project.
+The following flags must be passed to the compiler regardless of build method (CI or local):
 
-
-## Visual Studio IDE Configuration
-
- To use Visual Studio Code to compile FireFly-Controller, several files must be modified, all of which are located in `/.vscode/`. The folder may be hidden, but the file should be created automatically by VSCode.
-
-### c_cpp_properties.json
-No changes should be required for this file, as it is generated automatically.
-
-### settings.json
-```json
-{
-	"arduino.commandPath": "arduino-cli",
-	"arduino.useArduinoCli": true,
-	"arduino.path": "/usr/local/bin/",
-	"arduino.logLevel": "info",
-	"arduino.defaultTimestampFormat": "%H:%m:%S.%L "
-}
-```
-
-### arduino.json
-Contents of this file control the data sent to the compiler, and *do not* affect IntelliSense. IntelliSense is updated automatically from the compiler's output.
-
-Example File Contents:
-```json
-{
-	"sketch": "Hardware-Registration-and-Configuration.ino",
-	"configuration": "FlashFreq=80,PartitionScheme=default,UploadSpeed=921600,DebugLevel=none,EraseFlash=none",
-	"board": "esp32:esp32:firefly_controller",
-	"buildPreferences": [
-		[
-			"build.extra_flags",
-			"-DASYNCWEBSERVER_REGEX -DPRODUCT_HEX=0x08062305 -DESP32 -DCORE_DEBUG_LEVEL=3 -DDISABLE_ALL_LIBRARY_WARNINGS -I~/GitHub/P5Software/FireFly-Controller"
-		]
-	],
-	"port": "/dev/tty.SLAB_USBtoUART",
-	"output": "../.cache",
-	"programmer": "esptool"
-}
-```
-
-#### board
-Defines the custom board configured in the Custom Boards section, above: 
-`esp32:esp32:firefly_controller`
-
-
-#### build.extra_flags
 **`ASYNCWEBSERVER_REGEX`** Enables regex path matching in the async web server. Required for the URL routing patterns used throughout the application; must be set as a compile flag (not just a header define) so the library's own source files are also compiled with regex support enabled.
 
-**`PRODUCT_HEX`** This configuration indicates the hardware product ID expressed as a hexadecimal and is required. If it is not included, the compiler will trigger an error. Change the `0x08062305` value in the example shown above to match the actual hardware product ID, with `0x` prefixed. This allows for a product ID beginning with zero.
+**`PRODUCT_HEX`** The hardware product ID expressed as a hexadecimal. Required — the compiler will error if omitted. Use the `0x`-prefixed value from `devices.yaml` for the target hardware (e.g. `-DPRODUCT_HEX=0x08062305`).
 
-**`ESP32`** The hardware type must also be set for the Adafruit libraries to be configured correctly. Use `-DESP32` flag to set the hardware to ESP32. Without it, you can expect to receive errors such as ```fatal error: util/delay.h: No such file or directory```
+**`ESP32`** Required for Adafruit libraries to configure correctly. Without it, expect errors such as `fatal error: util/delay.h: No such file or directory`.
 
-**`CORE_DEBUG_LEVEL`** To show or quiet the debug outputs.  Additional libraries are slaved to these values in hardware.h:
+**`CORE_DEBUG_LEVEL`** Controls debug output verbosity:
 - `0` = None
 - `1` = Error
 - `2` = Warn
@@ -200,85 +158,21 @@ Defines the custom board configured in the Custom Boards section, above:
 - `4` = Debug
 - `5` = Verbose
 
-**`DISABLE_ALL_LIBRARY_WARNINGS`** Will quiet progra messages from the FOTA library.
+**`DISABLE_ALL_LIBRARY_WARNINGS`** Suppresses diagnostic messages from the FOTA library.
 
-You must also include the parent directory of FireFly-Controller using the `-I/my/path/to/project/FireFly-Controller` parameter. Note that abbreviated file paths using `~` (for instance, `~/project/FireFly-Controller`) will **not** work properly.
-
-The folder structure should look like this:
-
-```
-/my/path/to/project/FireFly-Controller
--> .vscode
--> boards.local.txt
--> Controller
-	---> Controller.ino
-	---> ...
--> Hardware-Registration-and-Configuration
-	---> www
-		-----> ...
-	---> Hardware-Registration-and-Configuration.ino
-
-	---> swagger.yaml
-	---> ...
--> devices.yaml
--> ...
--> common
-	---> hardware.h
-	---> deviceIdentity.h
-	---> ...
-```
-
-### Troubleshooting
-
-#### Uploads won't work
-
-If the upload function does not work, but the application compiles correctly, re-select the port on the bottom right side of the screen.
-
+The repo root must also be added to the include path (e.g. `-I/path/to/FireFly-Controller`) so that headers in `common/` can be resolved. Abbreviated paths using `~` will not work.
 
 ## Partitions
-FireFly Controller uses  a custom partition, `partitions.csv`, adjacent to the .ino file.
 
-See more information about [partitions](/controller/support/partitions).
+Each hardware model has its own partition layout defined in `devices.yaml`. The `partitions.csv` file is generated automatically at CI build time — there is no static file committed to the repository.
 
-
-#### Flashing `www` partition with 16MB Chip
-
-Size (see table above) = `0x2E0000`.  To create the image:
-
-```bash
-~/Library/Arduino15/packages/esp32/tools/mklittlefs/3.0.0-gnu12-dc7f933/mklittlefs -s 0x2E0000 -c ~/GitHub/P5Software/FireFly-Controller/Hardware-Registration-and-Configuration/www ~/GitHub/P5Software/FireFly-Controller/Hardware-Registration-and-Configuration/www.bin
-```
-
-
-Location (see table above) = `0xD10000`.  To flash the image:
-
-```bash
-~/Library/Arduino15/packages/esp32/tools/esptool_py/4.5.1/esptool --chip esp32 --port "/dev/tty.SLAB_USBtoUART" --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size 16MB 0xD10000 ~/GitHub/P5Software/FireFly-Controller/Hardware-Registration-and-Configuration/www.bin
-```
-
-
-#### Flashing `config` partition with 16MB Chip
-
-::: danger DATA LOSS MAY OCCUR
-This will destory any user-defined configuration!
-:::
-
-Size (see table above) = `0x80000`.  To create the image:
-
-```bash
-~/Library/Arduino15/packages/esp32/tools/mklittlefs/3.0.0-gnu12-dc7f933/mklittlefs -s 0x80000 -c ~/GitHub/P5Software/FireFly-Controller/Hardware-Registration-and-Configuration/config ~/GitHub/P5Software/FireFly-Controller/Hardware-Registration-and-Configuration/config.bin
-```
-
-Location (see table above) = `0xC90000`.  To flash the image:
-
-```bash
-~/Library/Arduino15/packages/esp32/tools/esptool_py/4.5.1/esptool --chip esp32 --port "/dev/tty.SLAB_USBtoUART" --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size 16MB 0xC90000 ~/GitHub/P5Software/FireFly-Controller/Hardware-Registration-and-Configuration/config.bin
-```
+See [Partitions](/controller/support/partitions) for the full partition layout and details on how the table is generated.
 
 ## Adding a new hardware version
-Hardware configurationsk are abstracted from the main applications to allow for compilation with minimal hardware-specific design considerations.  Each hardware model is defined in `hardware.h`.
 
-Additionally, the peripheral information must be added to `devices.yaml` at the repository root.  Adding the product HEX, product ID, `inputs_count`, and `outputs_count` to `devices.yaml` will add it to the Product ID drop down in the Identification area of the configuration, and will include it in the CI build matrix if its status is `ACTIVE`.
+Hardware configurations are abstracted from the main applications to allow for compilation with minimal hardware-specific design considerations. Each hardware model's pin mappings and hardware constants are defined in `hardware.h`.
+
+Peripheral information and build metadata are defined in `devices.yaml` at the repository root. Adding the product HEX, product ID, `inputs_count`, `outputs_count`, `bootloader_addr`, and `partition_scheme` to `devices.yaml` will include the model in the CI build matrix when its status is `ACTIVE`, and will populate the Product ID drop-down in the Hardware Registration and Configuration application.
 
 ## Filter Large JSON documents
 
