@@ -72,11 +72,11 @@ export default defineConfig({
                   {
                     text: 'Controller Application',
                     collapsed: true,
-                    link: '/controller/software/controller/index.md',
+                    link: '/controller/software/controller/',
                     items:[                  
                       { 
                         text: 'Configuration',
-                        link: '/controller/software/controller/configuration/index.md',
+                        link: '/controller/software/controller/configuration/',
                         collapsed: true,
                         items: [
                           { 
@@ -168,7 +168,7 @@ export default defineConfig({
                   {
                     text: 'Hardware Registration and Configuration Application',
                     collapsed: true,
-                    link: '/controller/software/hardware_registration_and_configuration/index.md',
+                    link: '/controller/software/hardware_registration_and_configuration/',
                     items:[
                       { 
                         text: 'API Reference',
@@ -251,7 +251,7 @@ export default defineConfig({
               },
               {
                 text: 'Development Environment',
-                link: '/controller/development_environment/index.md'
+                link: '/controller/development_environment/'
               },
             ]
           },
