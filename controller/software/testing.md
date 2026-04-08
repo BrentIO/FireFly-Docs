@@ -24,7 +24,7 @@ Rebuild the image any time `tests/requirements.txt` or `tests/Dockerfile` change
 ## Running the Controller Test Suite
 
 ```bash
-DEVICE_IP=<device-ip> docker compose -f tests/docker-compose.yaml run controller
+DEVICE_IP=<device-ip> docker compose -f tests/docker-compose.yaml run --rm controller
 ```
 
 The test runner will start and prompt you to enter the Visual Token displayed on the device's OLED screen:
@@ -33,7 +33,9 @@ The test runner will start and prompt you to enter the Visual Token displayed on
 Enter visual token from device OLED:
 ```
 
-Look at the device display, type the token, and press Enter.  The token is promoted to a long-term authorization (valid for 1 hour) before any tests execute, so there is no time pressure once you have entered it.  When the run completes it will delete the container.
+Look at the device display, type the token, and press Enter.  The token is promoted to a long-term authorization (valid for 1 hour) before any tests execute, so there is no time pressure once you have entered it.
+
+When the run completes it will delete the container.
 
 ## Running the Hardware Registration and Configuration Test Suite
 
