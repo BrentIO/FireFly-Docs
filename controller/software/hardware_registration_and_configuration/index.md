@@ -8,10 +8,8 @@ The Hardware Registration and Configuration application is intended to be used t
 - Displays hardware MAC addresses for the MCU
 - Provides a user interface to configure an identity for the device, including the device unique ID, product ID, and secret key
 - <Badge type="warning" text="TODO" /> Registers the device with the cloud service for configuration backup
-- Verifies the peripherals, such as the inputs, outputs, temperature sensors, OLED display, and EEPROM are online and functional
+- Verifies the peripherals, such as the inputs, outputs, temperature sensors, and OLED display are online and functional
 - Confirms the [partition table](/controller/support/partitions) matches the [expected configuration](/controller/development_environment/#adding-a-new-hardware-version)
-- Provides [management of certificates](/controller/support/certificate_management) to be used when updating the firmware or LittleFS, and for other uses
-- Permits the user to configure routine and force immediate [updates of firmware](/controller/support/ota_updates)
 - Displays a more robust [event log and error log](/controller/support/event_and_error_logs) inclusive of the event time and type with additional entries
 
 ## :no_entry_sign: What this application does not do

@@ -58,13 +58,13 @@ Connection speed and duplex are displayed.
 
 
 ## Hardware
-Displays information about the hardware, if an identity has been entered into the external EEPROM.  If it has not, a notification is displayed indicating it has not been configured.
+Displays information about the hardware, if an identity has been entered into NVS (device identity storage).  If it has not, a notification is displayed indicating it has not been configured.
 
 ### Intro
 ![Hardware Intro](./images/hardware_intro.svg)
 
 ### Detail
-The product ID (PID) from the external EEPROM is displayed, as well as the device's unique identifier (UUID).
+The product ID (PID) from NVS is displayed, as well as the device's unique identifier (UUID).
 
 ![Hardware](./images/hardware.svg)
 
