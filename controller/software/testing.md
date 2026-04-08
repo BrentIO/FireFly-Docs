@@ -44,7 +44,7 @@ DEVICE_IP=<device-ip> docker compose -f tests/docker-compose.yaml run --rm hw-re
 The same interactive token prompt applies.
 
 > [!WARNING]
-> The `test_eeprom.py` tests write and then delete EEPROM configuration.  Run these tests against a device that has not yet been provisioned, or one you are prepared to re-provision afterward.
+> The `test_identity.py` tests write and then delete device identity.  Run these tests against a device that has not yet been provisioned, or one you are prepared to re-provision afterward.
 
 > [!WARNING]
 > The `test_mcu.py` reboot test will restart the device.  No further tests should be expected to succeed after the device reboots within the same test session.

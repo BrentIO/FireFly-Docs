@@ -216,15 +216,11 @@ export default defineConfig({
                     text: 'Event and Error Logs',
                     link: '/controller/support/event_and_error_logs'
                   },
-                  { 
+                  {
                     text: 'Partitions',
                     link: '/controller/support/partitions'
                   },
-                  { 
-                    text: 'Performance Testing',
-                    link: '/controller/support/performance_testing'
-                  },
-                  { 
+                  {
                     text: 'Provisioning Mode',
                     link: '/controller/support/provisioning_mode'
                   },
