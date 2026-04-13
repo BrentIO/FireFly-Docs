@@ -2,21 +2,6 @@
 Reason codes that can be raised by the hardware abstraction libraries to the main application.
 
 
-## External EEPROM
-Defined in `externalEEPROM.h`
-
-| Enumeration | Code | Reason |
-| ------------| ---- | ------ |
-| `SUCCESS_NO_ERROR` | 0 | Request was successful, no error was returned | 
-| `DATA_TRANSMIT_BUFFER_ERROR` | 1 | Data too long to fit in transmit buffer |
-| `ADDRESS_OFFLINE` | 2 | Received NACK on transmit of address |
-| `TRANSMIT_NOT_ACKNOLWEDGED` | 3 | Received NACK on transmit of data |
-| `OTHER_ERROR` | 4 | Other error, raised by the I2C bus | 
-| `TIMEOUT` | 5 | Timeout |
-| `INVALID_HARDWARE_CONFIGURATION` | 10 | Invalid hardware configuration in hardware.h |
-| `UNKNOWN_ERROR` | 11 | Unknown/undocumented failure |
-
-
 ## Inputs
 Defined in `inputs.h`
 
