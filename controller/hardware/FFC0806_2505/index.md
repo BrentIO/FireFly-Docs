@@ -73,7 +73,6 @@ Network connectivity is via Ethernet using a W5500 chipset featuring an RJ45 con
 
 
 ## Bill of Materials
-Datasheets are availalble on the [components](../components.md) page.
 
 Prices are each, USD, exclusive of tax/tariff, or assembly prices.
 
