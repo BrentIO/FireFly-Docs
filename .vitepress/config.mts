@@ -59,10 +59,6 @@ export default defineConfig({
                     text: 'High Voltage Relays',
                     link: '/controller/hardware/relays'
                   },
-                  {
-                    text: 'Component Data Sheets',
-                    link: '/controller/hardware/components'
-                  },
                 ]
               },
               {
