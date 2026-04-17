@@ -145,19 +145,19 @@ The device's bill of materials is below, with links to the data sheets for each 
 
 ## Reference Designs
 
-[Schematic](./Schematic.pdf)
+[Schematic](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/hardware/FFC3232_2603/Schematic.pdf)
 
-[EasyEDA Project](./EasyEDA.zip)
+[EasyEDA Project](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/hardware/FFC3232_2603/EasyEDA.zip)
 
-[Gerber Files](./Gerber.zip)
+[Gerber Files](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/hardware/FFC3232_2603/Gerber.zip)
 
-[BOM](./BOM.csv)
+[BOM](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/hardware/FFC3232_2603/BOM.csv)
 
-[Pick and Place](./PickAndPlace.csv)
+[Pick and Place](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/hardware/FFC3232_2603/PickAndPlace.csv)
 
-[![PCB Top](./pcb-top.png)](./pcb-top.svg)
+[![PCB Top](./pcb-top.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/hardware/FFC3232_2603/pcb-top.svg)
 
-[![PCB Bottom](./pcb-bottom.png)](./pcb-bottom.svg)
+[![PCB Bottom](./pcb-bottom.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/hardware/FFC3232_2603/pcb-bottom.svg)
 
 
 ## 3D Printed Parts
