@@ -14,7 +14,7 @@ The Hardware Registration and Configuration application is intended to be used t
 
 ## VDD_SDIO eFuse Configuration
 
-On supported hardware variants (FFC0806-2305, FFC0806-2505, FFC3232-2505, FFC3232-2603), the Hardware Registration and Configuration application automatically burns three ESP32 eFuses on first boot to permanently lock the VDD_SDIO power rail at 3.3V.
+On supported hardware variants, the Hardware Registration and Configuration application automatically burns three ESP32 eFuses on first boot to permanently lock the VDD_SDIO power rail at 3.3V. Whether a given hardware variant requires this is determined by the `burn_vdd_sdio_efuse` field in [`devices.yaml`](https://github.com/BrentIO/FireFly-Controller/blob/main/devices.yaml). Currently enabled for: FFC0806-2305, FFC0806-2505, FFC3232-2505, FFC3232-2603.
 
 **Why this is necessary:** These hardware variants use the W5500 Ethernet chipset, whose MISO signal is connected to GPIO12. GPIO12 is also the ESP32's MTDI bootstrap pin — if it reads HIGH at reset (which occurs when the W5500 is active on the SPI bus), the ESP32 defaults VDD_SDIO to 1.8V instead of 3.3V. The PSRAM module requires 3.3V and will fail to initialize at 1.8V. Burning the eFuses removes this dependency on the GPIO12 state at reset.
 
