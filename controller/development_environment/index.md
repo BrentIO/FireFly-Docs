@@ -27,6 +27,15 @@ To run the ACT docker image through Visual Studio Code, use [GitHub Local Action
 | Options | container-architecture | `linux/arm64` | For Apple Silicon only |
 | Options | container-architecture | `linux/amd64` | For Apple Intel chips |
 
+## Core Versions
+The following ESP32 Arduino core version is used with this solution. This version is configured in [`libraries.yaml`](https://github.com/BrentIO/FireFly-Controller/blob/main/libraries.yaml) in the FireFly-Controller repository and is automatically updated on each production build.
+
+<!-- CORE-TABLE-START -->
+| Core | Version |
+| ---- | ------- |
+| [esp32:esp32](https://github.com/espressif/arduino-esp32) | 3.3.8 |
+<!-- CORE-TABLE-END -->
+
 ## Library Versions
 The following library versions are used with this solution. This table is automatically updated on each production build from [`libraries.yaml`](https://github.com/BrentIO/FireFly-Controller/blob/main/libraries.yaml) in the FireFly-Controller repository.
 
@@ -64,9 +73,9 @@ sed \
   > ./FireFly-Controller/boards.local.txt
 ```
 
-2. Create a symlink adjacent to the main boards file. Example for ESP Core version 3.3.7:
+2. Create a symlink adjacent to the main boards file, substituting the current core version from [Core Versions](#core-versions) above:
 ```bash
-ln -s ./FireFly-Controller/boards.local.txt ~/Library/Arduino15/packages/esp32/hardware/esp32/3.3.7/boards.local.txt
+ln -s ./FireFly-Controller/boards.local.txt ~/Library/Arduino15/packages/esp32/hardware/esp32/<VERSION>/boards.local.txt
 ```
 
 
