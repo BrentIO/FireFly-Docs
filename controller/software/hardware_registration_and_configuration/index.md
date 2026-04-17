@@ -12,6 +12,24 @@ The Hardware Registration and Configuration application is intended to be used t
 - Confirms the [partition table](/controller/support/partitions) matches the [expected configuration](/controller/development_environment/#adding-a-new-hardware-version)
 - Displays a more robust [event log and error log](/controller/support/event_and_error_logs) inclusive of the event time and type with additional entries
 
+## VDD_SDIO eFuse Configuration
+
+On supported hardware variants, the Hardware Registration and Configuration application automatically burns three ESP32 eFuses on first boot to permanently lock the VDD_SDIO power rail at 3.3V. Whether a given hardware variant requires this is determined by the `burn_vdd_sdio_efuse` field in [`devices.yaml`](https://github.com/BrentIO/FireFly-Controller/blob/main/devices.yaml). Currently enabled for: FFC0806-2305, FFC0806-2505, FFC3232-2505, FFC3232-2603.
+
+**Why this is necessary:** These hardware variants use the W5500 Ethernet chipset, whose MISO signal is connected to GPIO12. GPIO12 is also the ESP32's MTDI bootstrap pin — if it reads HIGH at reset (which occurs when the W5500 is active on the SPI bus), the ESP32 defaults VDD_SDIO to 1.8V instead of 3.3V. The PSRAM module requires 3.3V and will fail to initialize at 1.8V. Burning the eFuses removes this dependency on the GPIO12 state at reset.
+
+**What is burned:**
+
+| eFuse | Effect |
+| ----- | ------ |
+| `XPD_SDIO_FORCE` | Forces VDD_SDIO regulator on, overriding the GPIO12 bootstrap |
+| `XPD_SDIO_REG` | Enables the internal VDD_SDIO regulator |
+| `VDD_SDIO_TIEH` | Sets VDD_SDIO output to 3.3V |
+
+::: danger Irreversible
+eFuse burns are permanent and cannot be undone, even by reflashing the firmware. This operation happens automatically on the first boot of the Hardware Registration and Configuration application on supported hardware — no user action is required.
+:::
+
 ## :no_entry_sign: What this application does not do
 - Configures the user-programmable logic for high voltage switching
 - Exposes the port and channel configuration
