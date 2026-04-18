@@ -20,8 +20,8 @@ break visual-token Invalid
     API --> User : HTTP 401
 end
 
-API -> AP : **Start SoftAP**\nWPA2 password = ""nibble-interleave(BSSID)""\nTX power = ""2 dBm""\nmax clients = ""1""
-API --> User-- : HTTP 202
+API --> User : HTTP 202
+API -> AP-- : **Start SoftAP**\nWPA2 password = ""nibble-interleave(BSSID)""\nTX power = ""2 dBm""\nmax clients = ""1""
 
 
 Client -> Client : **Scan for SSID**\n"""FireFly-Provisioning""" (exact)
@@ -40,9 +40,19 @@ end
 AP --> Client-- : Connected (DHCP 192.168.4.x)
 
 Client -> API++ : **Get nonce**\nGET /api/provisioning/nonce
+
+break Request is not from SoftAP
+    API --> Client: HTTP 403
+end
+
 API --> Client-- : HTTP 200\n""{ "nonce": 3819273645 }""
 
-Client -> API++ : **Get the client UUID from its MAC Address**\nGET /api/provisioning/client\n""mac-address: aa:bb:cc:dd:ee:ff""\n""x-nonce: 3819273645"""
+Client -> API++ : **Get client payload from its MAC Address**\nGET /api/provisioning/client\n""mac-address: aa:bb:cc:dd:ee:ff""\n""x-nonce: 3819273645"""
+
+break Request is not from SoftAP
+    API --> Client: HTTP 403
+end
+
 API -> API : **Validate nonce**\nunused, matches session
 
 break Nonce used or invalid
@@ -62,7 +72,7 @@ Client -> Client : **Store config to LittleFS**
 Client -> Client : **Reboot into normal mode**
 
 User -> API++ : **Disable Provisioning Mode**\nDELETE /api/provisioning\n""{visual-token}""
-API -> AP : **Shut down SoftAP**
-API --> User-- : HTTP 202
+API --> User : HTTP 202
+API -> AP-- : **Shut down SoftAP**
 
 @enduml
