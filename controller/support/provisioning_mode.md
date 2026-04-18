@@ -49,6 +49,7 @@ The password is 12 uppercase hex characters (satisfies the WPA2 8-character mini
 :::info Security model
 - **WPA2 (CCMP/AES)** encrypts all traffic between the Controller SoftAP and the connected Client, protecting WiFi credentials, MQTT credentials, and all other sensitive payload fields in transit
 - **Single-use nonce** prevents replay attacks against the provisioning endpoint
+- **SoftAP-only endpoints** — `GET /api/provisioning/nonce` and `GET /api/provisioning/client` reject requests (403) unless they originate from the SoftAP IP address (`192.168.4.1`), preventing Ethernet-connected clients from calling them
 - **MAC allowlist** prevents unregistered devices from obtaining any configuration
 - **2 dBm TX power** on both Controller and Client limits effective range to 3–5 feet
 - **Single-client SoftAP** prevents two devices from provisioning simultaneously
