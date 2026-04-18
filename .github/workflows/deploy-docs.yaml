@@ -73,14 +73,11 @@ jobs:
 
       - name: Copy SVGs to public for direct URL access
         run: |
-          mkdir -p public/cloud/lambdas/images
-          cp cloud/lambdas/images/*.svg public/cloud/lambdas/images/
-          mkdir -p public/cloud/github_actions/images
-          cp cloud/github_actions/images/*.svg public/cloud/github_actions/images/
-          mkdir -p public/controller/support/images
-          cp controller/support/images/*.svg public/controller/support/images/
-          mkdir -p public/client/sequence_diagrams/images
-          cp client/sequence_diagrams/images/*.svg public/client/sequence_diagrams/images/
+          find . -name "*.svg" -path "*/images/*" | while read -r svg; do
+            dest="public/${svg#./}"
+            mkdir -p "$(dirname "$dest")"
+            cp "$svg" "$dest"
+          done
 
       - name: Build with VitePress
         run: npm run docs:build
