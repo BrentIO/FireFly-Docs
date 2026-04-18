@@ -6,7 +6,7 @@ Abbreviations that can be found in the event log or error display are documented
 | Inpt ctl | Input controller |
 | Out ctl | Output controller |
 | Temp sen | Temperature sensor |
-| No I/O setup (NVS) | I/O cannot be configured because the NVS UUID is empty |
+| No I/O setup (NVS) | I/O cannot be configured because the device identity UUID is not provisioned in eFuse |
 | No I/O file to read | I/O cannot be configured because there is no file matching the controller's UUID in ConfigFS |
 | No I/O ConfigFS offline | ConfigFS is not mounted |
 | In parse err `error` | There was an ArduinoJSON parsing failure when trying to read the controller's `ports` section of the configuration file with `error` specified |
