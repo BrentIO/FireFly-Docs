@@ -10,41 +10,59 @@ box "Client Device\n(ESP8266)"
 end box
 
 box "Controller (ESP32)"
-    participant "SoftAP\n(FireFly-Provisioning)" as AP
+    participant "SoftAP\n(SSID: FireFly-Provisioning)" as AP
     participant "HTTP API" as API
 end box
 
-User -> API++ : PUT /api/provisioning\n(visual-token)
-API -> AP : start SoftAP\nWPA2 password = nibble-interleave(BSSID)\nTX power = 2 dBm\nmax clients = 1
-API --> User-- : 202 Accepted
+User -> API++ : **Enable Provisioning Mode**\nPUT /api/provisioning\n""{visual-token}""
 
-Client -> Client : scan for SSID\n"FireFly-Provisioning" (exact)
-Client -> Client : read BSSID from scan result\ncompute password = nibble-interleave(BSSID)\nreduce TX power to minimum
-Client -> AP++ : connect WPA2\nusing derived password
-AP -> AP : verify MAC in allowlist
-
-alt MAC not in allowlist
-    AP -> API : rogue client event
-    API -> AP : shut down SoftAP
-    AP --> Client-- : disconnect
-else MAC allowed
-    AP --> Client-- : connected (DHCP 192.168.4.x)
-
-    Client -> API++ : GET /api/provisioning/nonce\n(no auth)
-    API --> Client-- : 200 { "nonce": 3819273645 }
-
-    Client -> API++ : GET /api/provisioning/client\nmac-address: aa:bb:cc:dd:ee:ff\nx-nonce: 3819273645
-    API -> API : validate nonce (unused, matches session)
-    API -> API : find client record by MAC
-    API -> API : invalidate nonce
-    API --> Client-- : 200 { full client config JSON }
-
-    Client -> Client : store config to EEPROM\n(WiFi, MQTT, HID, UUID)
-    Client -> Client : reboot into normal mode
+break visual-token Invalid
+    API --> User : HTTP 401
 end
 
-User -> API++ : DELETE /api/provisioning\n(visual-token)
-API -> AP : shut down SoftAP
-API --> User-- : 202 Accepted
+API -> AP : **Start SoftAP**\nWPA2 password = ""nibble-interleave(BSSID)""\nTX power = ""2 dBm""\nmax clients = ""1""
+API --> User-- : HTTP 202
+
+
+Client -> Client : **Scan for SSID**\n"""FireFly-Provisioning""" (exact)
+Client -> Client : **Read BSSID from scan result**\ncompute password = ""nibble-interleave(BSSID)""
+Client -> Client : **Reduce TX power to minimum**
+Client -> AP++ : **Connect using WPA2**\nwith computed password
+AP -> AP : **Verify MAC in allowlist**
+
+break MAC not in allowlist
+    AP -> API : **Rogue client event**
+    API -> API : **Mark MAC Address as Rogue Client**
+    API -> AP : **Shut down SoftAP**
+    AP --> Client-- : Disconnect
+end
+
+AP --> Client-- : Connected (DHCP 192.168.4.x)
+
+Client -> API++ : **Get nonce**\nGET /api/provisioning/nonce
+API --> Client-- : HTTP 200\n""{ "nonce": 3819273645 }""
+
+Client -> API++ : **Get the client UUID from its MAC Address**\nGET /api/provisioning/client\n""mac-address: aa:bb:cc:dd:ee:ff""\n""x-nonce: 3819273645"""
+API -> API : **Validate nonce**\nunused, matches session
+
+break Nonce used or invalid
+    API --> Client: HTTP 401
+end
+
+API -> API : **Find client record by ""mac-address""**
+
+break No client with ""mac-address""
+    API --> Client: HTTP 404
+end
+
+API -> API : **Invalidate nonce**
+API --> Client-- : HTTP 200\n""{client}""
+
+Client -> Client : **Store config to LittleFS**
+Client -> Client : **Reboot into normal mode**
+
+User -> API++ : **Disable Provisioning Mode**\nDELETE /api/provisioning\n""{visual-token}""
+API -> AP : **Shut down SoftAP**
+API --> User-- : HTTP 202
 
 @enduml
