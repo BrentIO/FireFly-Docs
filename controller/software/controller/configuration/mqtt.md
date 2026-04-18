@@ -20,8 +20,8 @@ You can specify four different wildcards based on your MQTT authentication stand
 This information is never encrypted, including when stored in the configuration database, any configuration exports, at rest on the Controller, and at rest on the Client.
 :::
 
-::: info NVS Required
-Using `$$uuid$$` requires the device identity to be stored in NVS.
+::: info Device Identity Required
+Using `$$uuid$$` requires the device identity to be provisioned in eFuse.
 :::
 
 

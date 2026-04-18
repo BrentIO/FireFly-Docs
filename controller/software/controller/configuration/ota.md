@@ -13,8 +13,8 @@ You can configure the URL to include wildcards, which will be substituted at exe
 | `$$pid$$` | `FFC3232-2305` |
 | `$$app$$` | `FireFly Controller` |
 
-::: info NVS Required
-Using `$$pid$$` requires the device identity to be stored in NVS.
+::: info Device Identity Required
+Using `$$pid$$` requires the device identity to be provisioned in eFuse.
 :::
 
 Additional information about [OTA updates](/controller/support/ota_updates) can be found on the support page.

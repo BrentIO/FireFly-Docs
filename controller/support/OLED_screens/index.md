@@ -58,13 +58,13 @@ Connection speed and duplex are displayed.
 
 
 ## Hardware
-Displays information about the hardware, if an identity has been entered into NVS (device identity storage).  If it has not, a notification is displayed indicating it has not been configured.
+Displays information about the hardware, if a device identity has been provisioned in eFuse.  If it has not, a notification is displayed indicating it has not been configured.
 
 ### Intro
 ![Hardware Intro](./images/hardware_intro.svg)
 
 ### Detail
-The product ID (PID) from NVS is displayed, as well as the device's unique identifier (UUID).
+The product ID (PID) and unique identifier (UUID) from eFuse are displayed.
 
 ![Hardware](./images/hardware.svg)
 
@@ -97,7 +97,7 @@ The software application name and version are displayed.  There are some [abbrev
 ![Error](./images/error.svg)
 
 ## HW/FW Mismatch
-If the firmware’s product hex does not match the hardware’s product hex stored in NVS, the system will display an error and halt the boot process.
+If the firmware’s product hex does not match the hardware’s product hex stored in eFuse, the system will display an error and halt the boot process.
 
 ![HW/FW Mismatch](./images/hw_fw_mismatch.svg)
 

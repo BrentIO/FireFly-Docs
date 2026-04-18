@@ -6,11 +6,27 @@ The Hardware Registration and Configuration application is intended to be used t
 - Sets up an HTTP server using the on-board Ethernet or WiFi (depending on hardware compile options)
 - Sets up the [OLED display](/controller/support/OLED_screens/) (where supported by the hardware) to display basic information and provide a user interface button
 - Displays hardware MAC addresses for the MCU
-- Provides a user interface to configure an identity for the device, including the device unique ID, product ID, and secret key
+- Provides a user interface to configure an identity for the device, including the device unique ID and product ID. The master cryptographic key is generated on-device and burned to eFuse automatically — it never leaves the chip.
 - <Badge type="warning" text="TODO" /> Registers the device with the cloud service for configuration backup
 - Verifies the peripherals, such as the inputs, outputs, temperature sensors, and OLED display are online and functional
 - Confirms the [partition table](/controller/support/partitions) matches the [expected configuration](/controller/development_environment/#adding-a-new-hardware-version)
 - Displays a more robust [event log and error log](/controller/support/event_and_error_logs) inclusive of the event time and type with additional entries
+
+## Device Identity eFuse Storage
+
+Device identity is stored in eFuse — one-time programmable silicon registers that survive firmware reflashing and cannot be read by extracting the flash chip.
+
+| eFuse Block | Contents | Size |
+|-------------|----------|------|
+| BLOCK1 bytes 0–15 | UUID (binary, RFC 4122) | 16 bytes |
+| BLOCK1 bytes 16–19 | Product hex code (`uint32_t`) | 4 bytes |
+| BLOCK3 bytes 0–31 | Master cryptographic key | 32 bytes |
+
+The master key is generated on-device using the hardware CSRNG (`esp_fill_random`) at provisioning time. It is never transmitted, never stored in flash, and never returned by any API endpoint. Future features (ConfigFS encryption, cloud backup encryption, FireFly-Cloud device authentication) will derive purpose-specific keys from the master using HKDF-SHA256.
+
+::: danger Irreversible
+eFuse burns are permanent and cannot be undone, even by reflashing the firmware. Calling `POST /api/identity` a second time returns `409 Conflict` — the identity cannot be changed once written.
+:::
 
 ## VDD_SDIO eFuse Configuration
 
