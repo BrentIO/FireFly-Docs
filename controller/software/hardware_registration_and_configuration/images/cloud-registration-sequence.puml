@@ -1,0 +1,77 @@
+@startuml
+!include ../../../../images/common-sequence.iuml
+
+title FireFly-Cloud Device Registration
+
+actor "FireFly-Cloud\nAdmin" as Admin
+actor "Manufacturing\nOperator" as Op
+
+box "FireFly-Cloud"
+    participant "API Gateway" as APIGW
+    database DynamoDB
+end box
+
+box "FireFly Controller (ESP32)"
+    participant "HW-Reg\nFirmware" as HWReg
+end box
+
+== Obtain Registration Key ==
+
+Admin -> APIGW++ : **Create a new registration key**\nPOST /registration-keys\n""{visual-token}""
+APIGW -> DynamoDB++ : **Store key with 30-minute TTL**\n""key = "ABC123", ttl = now+1800, used = false""
+DynamoDB --> APIGW-- : OK
+APIGW --> Admin-- : HTTP 201\n""{ "key": "ABC123" }""
+Admin -> Op : **Share registration key with operator**\n""ABC123"" (expires in 30 min, one-time use)
+
+== Provision Device Identity ==
+
+Op -> HWReg++ : **Burn device identity to eFuse**\nPOST /api/identity\n""{ uuid, product_id, product_hex }""
+HWReg -> HWReg : **Write UUID + master key to eFuse (irreversible)**
+HWReg --> Op-- : HTTP 201 Created
+
+== Register Device with FireFly-Cloud ==
+
+Op -> HWReg++ : **Initiate cloud device registration**\nPOST /api/registration\n""X-Registration-Key: ABC123""\n""{ "url": "https://api.fireflylx.com" }""
+HWReg -> HWReg : **Derive authentication key**\n""key_auth = HKDF-SHA256(master, "firefly-auth-v1")""
+HWReg -> HWReg : **Compute P-256 public key from ""key_auth"" scalar**
+HWReg -> HWReg : **Zero ""key_auth"" bytes immediately**
+
+HWReg -> APIGW++ : **Register device in DynamoDB**\nPOST /devices/register\n""X-Registration-Key: ABC123""\n""{ uuid, public_key, device_class,""\n"" registering_application, mcu{...} }""
+
+APIGW -> DynamoDB++ : **Look up registration key**\n""key = "ABC123""
+DynamoDB --> APIGW-- : ""{ key: "ABC123", ttl, used: false }""
+
+break Key not found, expired, or already used
+    APIGW --> HWReg : HTTP 401 Unauthorized
+    HWReg --> Op : HTTP 403\n""{ "message": "Invalid or expired registration key" }""
+end
+
+APIGW -> DynamoDB++ : **Write device record**\n""uuid (PK), product_hex (GSI),""\n""public_key, registration_date (immutable), ...""
+DynamoDB --> APIGW-- : OK
+APIGW -> DynamoDB++ : **Delete used registration key**
+DynamoDB --> APIGW-- : OK
+APIGW --> HWReg-- : HTTP 204 No Content
+HWReg --> Op-- : HTTP 204 No Content
+
+== Boot Status Check (runs in loop() after NTP syncs) ==
+
+HWReg -> HWReg : **Derive ""key_auth"" and generate random nonce**
+HWReg -> HWReg : **Sign nonce with ECDSA-P256 using ""key_auth""**
+HWReg -> HWReg : **Zero ""key_auth"" bytes immediately**
+
+HWReg -> APIGW++ : **Verify device registration status**\nGET /devices/{uuid}/registration\n""X-Device-UUID: {uuid}""\n""X-Device-Nonce: {base64}""\n""X-Device-Signature: {base64}""
+
+APIGW -> DynamoDB++ : **Look up device record by UUID**
+DynamoDB --> APIGW-- : Device record (includes stored public key)
+
+alt UUID header and path param do not match
+    APIGW --> HWReg : HTTP 403 Forbidden
+else Signature invalid or device not found
+    APIGW --> HWReg : HTTP 401 Unauthorized
+else Signature valid
+    APIGW --> HWReg-- : HTTP 200\n""{ registered: true, registration_date, ... }""
+end
+
+HWReg -> HWReg : **Update registration state and event log**
+
+@enduml
