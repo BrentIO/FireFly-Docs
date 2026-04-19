@@ -36,3 +36,6 @@ Abbreviations that can be found in the event log or error display are documented
 | Enc init fail | File encryption initialization failed; the HKDF key derivation or AES context setup failed after reading the eFuse master secret. This indicates a firmware or eFuse provisioning problem. All configuration reads and writes will fail until the device is re-provisioned and rebooted |
 | Config decrypt fail | A controller configuration file on ConfigFS could not be decrypted; this typically means the file is corrupted, was written by a different device, or the eFuse master key does not match. The affected function (I/O setup, MQTT, OTA, etc.) will not be configured |
 | Client decrypt fail | A client configuration file on ConfigFS could not be decrypted; this typically means the file is corrupted or the eFuse master key does not match. The affected client will be skipped during provisioning scans |
+| Cloud reg check | HW-Reg attempted to verify cloud registration status at boot |
+| Cloud registered | Device confirmed as registered with FireFly-Cloud |
+| Cloud reg fail | Cloud registration or verification request failed; cloud may be unreachable, key invalid, or signature rejected |
