@@ -144,3 +144,26 @@ Some CI workflows require secrets to be configured across repositories. Each sec
 2. Under **Environment secrets**, click **Add secret**
 3. Name: `FIREFLY_DOCS_TOKEN`
 4. Value: paste the token generated above
+
+### `FIREFLY_CLOUD_TOKEN`
+
+**Installed in:** `BrentIO/FireFly-Controller` → Settings → Secrets and variables → Actions → **Repository secrets**
+
+**Purpose:** Allows the FireFly-Controller CI workflow to trigger the configurator UI deployment workflow in `BrentIO/FireFly-Cloud` via `repository_dispatch` after a successful firmware build.
+
+**To create the token:**
+
+1. Go to GitHub → **Settings** → **Developer settings** → **Personal access tokens** → **Fine-grained tokens**
+2. Click **Generate new token**
+3. Set the resource owner to `BrentIO`
+4. Under **Repository access**, select **Only select repositories** and choose `BrentIO/FireFly-Cloud`
+5. Under **Permissions → Repository permissions**, grant:
+   - **Contents**: Read and write
+6. Generate the token and copy it immediately
+
+**To install the token in `BrentIO/FireFly-Controller`:**
+
+1. Go to `BrentIO/FireFly-Controller` → **Settings** → **Secrets and variables** → **Actions**
+2. Under **Repository secrets**, click **New repository secret**
+3. Name: `FIREFLY_CLOUD_TOKEN`
+4. Value: paste the token generated above
