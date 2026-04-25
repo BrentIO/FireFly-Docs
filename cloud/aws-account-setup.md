@@ -207,6 +207,23 @@ Same as `dev`, using FireFly-PROD account values.
 
 ---
 
+## Step 5: FireFly-Controller Repository Secret
+
+The `deploy-configurator-ui` workflow in **FireFly-Cloud** is triggered from the **FireFly-Controller** repository via a Personal Access Token (PAT).  This token must be stored as a **repository-level** secret in FireFly-Controller (not environment-scoped, because `workflow_call` jobs cannot have an environment set).
+
+1. Create a GitHub PAT with `repo` scope (or a fine-grained token with `actions: write` on the **FireFly-Cloud** repository)
+2. In **FireFly-Controller** → **Settings** → **Secrets and variables** → **Actions** → **Repository secrets**, add:
+
+| Name | Value |
+|---|---|
+| `FIREFLY_CLOUD_TOKEN` | PAT created above |
+
+::: warning
+This secret must be at the **repository** level, not inside a `dev` or `production` environment.  Environment-scoped secrets are not accessible to reusable `workflow_call` jobs, and the token will appear empty at runtime.
+:::
+
+---
+
 ## Next Steps
 
 With both accounts bootstrapped and GitHub environments configured, run the `deploy-all` workflow targeting `dev` to perform the first end-to-end deployment.  See [GitHub Actions Workflows](/cloud/github_actions/index) for the full deployment reference.
