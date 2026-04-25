@@ -167,6 +167,7 @@ Secrets and variables must be set at the **environment** level, not at the repos
 | `ROUTE_53_HOSTED_ZONE_ID` | Hosted zone ID of `dev.fireflylx.com` in FireFly-DEV |
 | `S3_FIRMWARE_PRIVATE_BUCKET_NAME` | Your chosen name for the private firmware bucket |
 | `S3_FIRMWARE_PUBLIC_BUCKET_NAME` | Your chosen name for the public firmware bucket |
+| `S3_CONFIGURATOR_BUCKET_NAME` | Your chosen name for the configurator static files bucket |
 | `S3_UI_BUCKET_NAME` | Your chosen name for the UI static files bucket |
 | `S3_SAM_DEPLOYMENT_BUCKET_NAME` | SAM bucket created in Step 3.2 |
 
@@ -180,6 +181,7 @@ Secrets and variables must be set at the **environment** level, not at the repos
 | `CERTIFICATE_DOMAIN_NAME` | `*.dev.fireflylx.com` |
 | `CLEANUP_TEST_RECORDS` | `true` |
 | `CLOUD_FORMATION_EXECUTION_ROLE_NAME` | `firefly-cloudformation-execution-role` |
+| `CONFIGURATOR_DOMAIN_NAME` | `configurator.dev.fireflylx.com` |
 | `FIRMWARE_DOMAIN_NAME` | `firmware.dev.fireflylx.com` |
 | `FIRMWARE_TYPE_MAP` | `{"Controller":"FireFly Controller"}` |
 | `UI_DOMAIN_NAME` | `ui.dev.fireflylx.com` |
@@ -198,6 +200,7 @@ Same as `dev`, using FireFly-PROD account values.
 | `CERTIFICATE_DOMAIN_NAME` | `*.fireflylx.com` |
 | `CLEANUP_TEST_RECORDS` | `true` |
 | `CLOUD_FORMATION_EXECUTION_ROLE_NAME` | `firefly-cloudformation-execution-role` |
+| `CONFIGURATOR_DOMAIN_NAME` | `configurator.fireflylx.com` |
 | `FIRMWARE_DOMAIN_NAME` | `firmware.fireflylx.com` |
 | `FIRMWARE_TYPE_MAP` | `{"Controller":"FireFly Controller"}` |
 | `UI_DOMAIN_NAME` | `ui.fireflylx.com` |
