@@ -5,4 +5,4 @@ By default, HTTPS OTA validation uses the ESP32 core's built-in Mozilla root CA 
 See more information about [certificate management](/controller/support/certificate_management).
 
 
-[![Certificates](./certificates.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/software/controller/configuration/certificates.png)
+[![Certificates](./certificates.png)](./certificates.png)
