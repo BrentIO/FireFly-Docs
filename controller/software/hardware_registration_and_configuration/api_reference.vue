@@ -6,7 +6,7 @@ import "swagger-ui-dist/swagger-ui.css";
 onMounted(() => {
   SwaggerUIBundle({
     dom_id: "#swaggerContainer",
-    url: "https://raw.githubusercontent.com/BrentIO/FireFly-Controller/main/Hardware-Registration-and-Configuration/swagger.yaml"
+    url: "https://raw.githubusercontent.com/BrentIO/FireFly-Controller/main/Hardware-Registration-and-Configuration/openapi.yaml"
   });
 });
 </script>
