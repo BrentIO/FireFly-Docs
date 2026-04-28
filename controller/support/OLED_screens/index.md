@@ -7,9 +7,9 @@ A scrollbar is show on the right side of the display indicating where the user i
 
 
 ## Sequence Flow
-[![Sequence Diagram](./images/sequence.drawio.svg)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/support/OLED_screens/images/sequence.drawio.svg)
+[![Sequence Diagram](./images/sequence.drawio.svg)](./images/sequence.drawio.svg)
 
-[draw.io source file](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/support/OLED_screens/sequence.drawio)
+[draw.io source file](./sequence.drawio)
 
 ## Logo
 Displays until the controller has booted.

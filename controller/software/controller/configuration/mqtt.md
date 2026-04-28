@@ -25,4 +25,4 @@ Using `$$uuid$$` requires the device identity to be provisioned in eFuse.
 :::
 
 
-[![MQTT](./mqtt.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/software/controller/configuration/mqtt.png)
+[![MQTT](./mqtt.png)](./mqtt.png)
