@@ -71,12 +71,15 @@ jobs:
           done
           if [ "$missing" -eq 1 ]; then exit 1; fi
 
-      - name: Copy SVGs to public for direct URL access
+      - name: Copy static assets to public for direct URL access
         run: |
-          find . -name "*.svg" -path "*/images/*" | while read -r svg; do
-            dest="public/${svg#./}"
+          find . \( -name "*.svg" -o -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.gif" -o -name "*.webp" \) \
+            -not -path "./public/*" \
+            -not -path "./node_modules/*" \
+            -not -path "./.vitepress/*" | while read -r asset; do
+            dest="public/${asset#./}"
             mkdir -p "$(dirname "$dest")"
-            cp "$svg" "$dest"
+            cp "$asset" "$dest"
           done
 
       - name: Build with VitePress
