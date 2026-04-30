@@ -57,6 +57,6 @@ The result is held in RAM for the current session. The nav item shows a warning 
 |---------|-------|---------|
 | `Cloud reg check` | INFO | HW-Reg attempted to verify cloud registration status at boot |
 | `Cloud registered` | INFO | Device confirmed as registered with FireFly-Cloud |
-| `Cloud reg fail` | ERROR | Cloud registration or verification request failed (network error, crypto failure, or unexpected HTTP status) |
+| `Cloud reg fail` | NOTIFICATION | Cloud registration or verification request failed (network error, crypto failure, or unexpected HTTP status) |
 
 See [Abbreviations](/controller/support/abbreviations.md) for the full event log abbreviation reference.
