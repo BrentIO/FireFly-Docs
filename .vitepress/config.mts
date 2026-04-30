@@ -167,7 +167,11 @@ export default defineConfig({
                     collapsed: true,
                     link: '/controller/software/hardware_registration_and_configuration/',
                     items:[
-                      { 
+                      {
+                        text: 'Cloud Registration',
+                        link: '/controller/software/hardware_registration_and_configuration/cloud-registration'
+                      },
+                      {
                         text: 'API Reference',
                         link: '/controller/software/hardware_registration_and_configuration/api_reference'
                       },
