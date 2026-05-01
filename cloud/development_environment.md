@@ -144,66 +144,7 @@ All deployments and deletions are performed through GitHub Actions workflows, ea
 
 For initial setup, use **Deploy All** (`deploy-all`), which deploys all stacks in the correct dependency order and runs integration tests at the end.
 
-Individual deploy workflows are available for updating a specific stack without redeploying everything:
-
-| Workflow | Description |
-| -------- | ----------- |
-| `deploy-all` | Deploys all stacks in dependency order and runs integration tests. Use this for first-time setup. |
-| `deploy-dynamodb-firmware` | Creates the DynamoDB firmware table. |
-| `deploy-dynamodb-users` | Creates the DynamoDB users allowed-list table. |
-| `deploy-func-cognito-pre-signup` | Deploys the Cognito pre-signup Lambda. Requires the users DynamoDB table. |
-| `deploy-cognito` | Deploys the Cognito User Pool with Google IdP. Requires the pre-signup Lambda. |
-| `deploy-acm` | Requests the ACM certificate and validates it via Route 53. Must run before API Gateway, CloudFront, and Cognito. |
-| `deploy-api-gateway` | Deploys the HTTP API Gateway with JWT authorizer. Requires ACM certificate and Cognito User Pool. |
-| `deploy-shared-layer` | Publishes the shared Lambda layer used by most functions. |
-| `deploy-func-api-health-get` | Deploys the health check Lambda. Requires API Gateway. |
-| `deploy-func-api-firmware-get` | Deploys the firmware list/item Lambda. Requires API Gateway and shared layer. |
-| `deploy-func-api-users-get` | Deploys the users list Lambda. Requires API Gateway and Cognito. |
-| `deploy-func-api-users-post` | Deploys the user invite Lambda. Requires API Gateway and users table. |
-| `deploy-func-api-users-delete` | Deploys the user delete Lambda. Requires API Gateway, Cognito, and users table. |
-| `deploy-func-api-users-patch` | Deploys the user super-status Lambda. Requires API Gateway and Cognito. |
-| `deploy-func-api-firmware-status-patch` | Deploys the firmware status update Lambda. Requires API Gateway and shared layer. |
-| `deploy-func-api-firmware-delete` | Deploys the firmware delete Lambda. Requires API Gateway and shared layer. |
-| `deploy-func-s3-firmware-uploaded` | Deploys the S3 upload trigger Lambda. Requires shared layer. |
-| `deploy-func-s3-firmware-deleted` | Deploys the S3 delete trigger Lambda. Requires shared layer. |
-| `deploy-s3-firmware` | Creates the private S3 firmware bucket and wires up event notifications. Requires both S3 trigger Lambdas. |
-| `deploy-s3-firmware-public` | Creates the public S3 bucket for OTA firmware delivery. |
-| `deploy-cloudfront-firmware` | Deploys the CloudFront distribution. Requires ACM certificate and public S3 bucket. |
-| `deploy-func-api-ota-get` | Deploys the OTA firmware manifest Lambda. Requires API Gateway, shared layer, and CloudFront. |
-| `deploy-func-api-firmware-download-get` | Deploys the pre-signed download URL Lambda. Requires API Gateway, shared layer, and private S3 firmware bucket. |
-| `deploy-s3-ui` | Creates the private S3 bucket for UI static files. |
-| `deploy-cloudfront-ui` | Deploys the CloudFront distribution serving the UI. Requires ACM certificate and UI S3 bucket. |
-| `deploy-ui-app` | Builds the Vue app and syncs it to S3, then invalidates the CloudFront cache. Requires CloudFront UI distribution. |
-
-### Deleting
-
-Use **Delete All** (`delete-all`) to tear down the entire environment.  Individual delete workflows are available if you need to remove a specific stack.
-
-::: warning Dependency Order
-Stacks must be deleted in reverse dependency order.  **Delete All** handles this automatically.  If running individual delete workflows manually, delete Lambda functions before the API Gateway, the API Gateway before the ACM certificate, the S3 bucket before the S3 trigger Lambdas, and all Lambda functions before the shared layer.
-:::
-
-| Workflow | Description |
-| -------- | ----------- |
-| `delete-all` | Tears down all stacks in the correct order. |
-| `delete-s3-firmware` | Deletes the private S3 firmware bucket stack. Must run before the S3 trigger Lambdas. |
-| `delete-func-api-ota-get` | Deletes the OTA firmware manifest Lambda. Must run before the API Gateway. |
-| `delete-cloudfront-firmware` | Deletes the CloudFront distribution. Must run before the public S3 bucket. |
-| `delete-s3-firmware-public` | Deletes the public S3 firmware bucket. Must run after CloudFront is deleted. |
-| `delete-func-api-health-get` | Deletes the health check Lambda. |
-| `delete-func-api-firmware-get` | Deletes the firmware list/download Lambda. |
-| `delete-func-api-firmware-status-patch` | Deletes the firmware status update Lambda. |
-| `delete-func-api-firmware-delete` | Deletes the firmware delete Lambda. |
-| `delete-api-gateway` | Deletes the API Gateway. Must run after all API Lambda functions are deleted. |
-| `delete-acm` | Deletes the ACM certificate. Must run after the API Gateway, both CloudFront distributions, and Cognito are deleted. |
-| `delete-func-s3-firmware-uploaded` | Deletes the S3 upload trigger Lambda. Must run after the S3 bucket is deleted. |
-| `delete-func-s3-firmware-deleted` | Deletes the S3 delete trigger Lambda. Must run after the S3 bucket is deleted. |
-| `delete-shared-layer` | Deletes the shared Lambda layer. Must run after all Lambda functions are deleted. |
-| `delete-dynamodb-firmware` | Deletes the DynamoDB firmware table. |
-| `delete-func-api-firmware-download-get` | Deletes the pre-signed download URL Lambda. Must run before the API Gateway. |
-| `delete-ui-app` | Empties the UI S3 bucket. Must run before the CloudFront UI distribution is deleted. |
-| `delete-cloudfront-ui` | Deletes the CloudFront UI distribution. Must run after the UI S3 bucket is emptied. |
-| `delete-s3-ui` | Deletes the private UI S3 bucket. Must run after the CloudFront UI distribution is deleted. |
+For a complete list of individual deploy and delete workflows with descriptions and dependency order, see the [GitHub Actions Workflow Index](/cloud/github_actions/index).
 
 ### Integration Tests
 
