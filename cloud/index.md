@@ -6,6 +6,10 @@ FireFly Cloud is the serverless AWS backend that manages the Arduino firmware li
 
 Firmware enters the system by being uploaded directly to S3, which triggers the upload Lambda to validate and register it.  The API Gateway exposes endpoints for querying firmware records, advancing their release status, and initiating deletion.  When firmware is released, binaries are published to a public S3 bucket fronted by CloudFront for device OTA delivery.  When firmware is revoked, the binaries are moved to a restricted prefix and the CloudFront URLs become inaccessible.
 
+## Configurator UI
+
+The Configurator UI is a cloud-hosted instance of the FireFly Controller web interface, built from the FireFly-Controller repository with `VITE_CLOUD_MODE=true`. It is served from a private S3 bucket (`firefly-configurator-s3`) fronted by a CloudFront distribution (`firefly-configurator-cloudfront`) at the `CONFIGURATOR_DOMAIN_NAME` domain. The `deploy-configurator-ui` workflow builds and syncs the assets from FireFly-Controller and is triggered by `repository_dispatch` from that repo when a new version is released.
+
 ## CloudFormation Stacks
 
 The environment is composed of multiple CloudFormation stacks, each managed by its own deploy and delete workflow:
@@ -39,6 +43,8 @@ The environment is composed of multiple CloudFormation stacks, each managed by i
 | `firefly-func-api-firmware-download-get` | Pre-signed URL endpoint for downloading firmware ZIPs from the private bucket |
 | `firefly-s3-ui` | Private S3 bucket for the UI static files |
 | `firefly-cloudfront-ui` | CloudFront distribution serving the firmware management UI SPA |
+| `firefly-configurator-s3` | Private S3 bucket for the Configurator UI static files |
+| `firefly-configurator-cloudfront` | CloudFront distribution serving the Configurator UI SPA |
 
 ## Shared Lambda Layer
 

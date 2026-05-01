@@ -7,7 +7,8 @@ The Hardware Registration and Configuration application is intended to be used t
 - Sets up the [OLED display](/controller/support/OLED_screens/) (where supported by the hardware) to display basic information and provide a user interface button
 - Displays hardware MAC addresses for the MCU
 - Provides a user interface to configure an identity for the device, including the device unique ID and product ID. The master cryptographic key is generated on-device and burned to eFuse automatically — it never leaves the chip.
-- <Badge type="warning" text="TODO" /> Registers the device with the cloud service for configuration backup
+- Registers the device with the cloud service
+- <Badge type="warning" text="TODO" /> Configuration backup to the cloud service
 - Verifies the peripherals, such as the inputs, outputs, temperature sensors, and OLED display are online and functional
 - Confirms the [partition table](/controller/support/partitions) matches the [expected configuration](/controller/development_environment/#adding-a-new-hardware-version)
 - Displays a more robust [event log and error log](/controller/support/event_and_error_logs) inclusive of the event time and type with additional entries
