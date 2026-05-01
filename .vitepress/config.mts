@@ -322,16 +322,24 @@ export default defineConfig({
                     collapsed: true,
                     items: [
                       {
-                        text: 'func-api-appconfig-delete',
-                        link: '/cloud/lambdas/func-api-appconfig-delete'
-                      },
-                      {
                         text: 'func-api-appconfig-get',
                         link: '/cloud/lambdas/func-api-appconfig-get'
                       },
                       {
                         text: 'func-api-appconfig-patch',
                         link: '/cloud/lambdas/func-api-appconfig-patch'
+                      },
+                      {
+                        text: 'func-api-devices-get',
+                        link: '/cloud/lambdas/func-api-devices-get'
+                      },
+                      {
+                        text: 'func-api-devices-register-post',
+                        link: '/cloud/lambdas/func-api-devices-register-post'
+                      },
+                      {
+                        text: 'func-api-devices-registration-get',
+                        link: '/cloud/lambdas/func-api-devices-registration-get'
                       },
                       {
                         text: 'func-api-firmware-delete',
@@ -356,6 +364,14 @@ export default defineConfig({
                       {
                         text: 'func-api-ota-get',
                         link: '/cloud/lambdas/func-api-ota-get'
+                      },
+                      {
+                        text: 'func-api-registration-keys-get',
+                        link: '/cloud/lambdas/func-api-registration-keys-get'
+                      },
+                      {
+                        text: 'func-api-registration-keys-post',
+                        link: '/cloud/lambdas/func-api-registration-keys-post'
                       },
                       {
                         text: 'func-api-users-delete',
@@ -404,6 +420,10 @@ export default defineConfig({
                         link: '/cloud/github_actions/api-gateway'
                       },
                       {
+                        text: 'cloudfront-configurator',
+                        link: '/cloud/github_actions/cloudfront-configurator'
+                      },
+                      {
                         text: 'cloudfront-firmware',
                         link: '/cloud/github_actions/cloudfront-firmware'
                       },
@@ -416,16 +436,24 @@ export default defineConfig({
                         link: '/cloud/github_actions/cognito'
                       },
                       {
+                        text: 'configurator-ui',
+                        link: '/cloud/github_actions/configurator-ui'
+                      },
+                      {
+                        text: 'dynamodb-devices',
+                        link: '/cloud/github_actions/dynamodb-devices'
+                      },
+                      {
                         text: 'dynamodb-firmware',
                         link: '/cloud/github_actions/dynamodb-firmware'
                       },
                       {
-                        text: 'dynamodb-users',
-                        link: '/cloud/github_actions/dynamodb-users'
+                        text: 'dynamodb-registration-keys',
+                        link: '/cloud/github_actions/dynamodb-registration-keys'
                       },
                       {
-                        text: 'func-api-appconfig-delete',
-                        link: '/cloud/github_actions/func-api-appconfig-delete'
+                        text: 'dynamodb-users',
+                        link: '/cloud/github_actions/dynamodb-users'
                       },
                       {
                         text: 'func-api-appconfig-get',
@@ -434,6 +462,18 @@ export default defineConfig({
                       {
                         text: 'func-api-appconfig-patch',
                         link: '/cloud/github_actions/func-api-appconfig-patch'
+                      },
+                      {
+                        text: 'func-api-devices-get',
+                        link: '/cloud/github_actions/func-api-devices-get'
+                      },
+                      {
+                        text: 'func-api-devices-register-post',
+                        link: '/cloud/github_actions/func-api-devices-register-post'
+                      },
+                      {
+                        text: 'func-api-devices-registration-get',
+                        link: '/cloud/github_actions/func-api-devices-registration-get'
                       },
                       {
                         text: 'func-api-firmware-delete',
@@ -458,6 +498,14 @@ export default defineConfig({
                       {
                         text: 'func-api-ota-get',
                         link: '/cloud/github_actions/func-api-ota-get'
+                      },
+                      {
+                        text: 'func-api-registration-keys-get',
+                        link: '/cloud/github_actions/func-api-registration-keys-get'
+                      },
+                      {
+                        text: 'func-api-registration-keys-post',
+                        link: '/cloud/github_actions/func-api-registration-keys-post'
                       },
                       {
                         text: 'func-api-users-delete',
@@ -490,6 +538,10 @@ export default defineConfig({
                       {
                         text: 'integration-tests',
                         link: '/cloud/github_actions/integration-tests'
+                      },
+                      {
+                        text: 's3-configurator',
+                        link: '/cloud/github_actions/s3-configurator'
                       },
                       {
                         text: 's3-firmware',

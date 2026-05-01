@@ -36,15 +36,19 @@ None — this workflow has no prerequisites.
 
 All of the following must complete before this job runs:
 
-- `delete-func-api-appconfig-delete`
 - `delete-func-api-appconfig-get`
 - `delete-func-api-appconfig-patch`
+- `delete-func-api-devices-get`
+- `delete-func-api-devices-register-post`
+- `delete-func-api-devices-registration-get`
 - `delete-func-api-firmware-delete`
 - `delete-func-api-firmware-download-get`
 - `delete-func-api-firmware-get`
 - `delete-func-api-firmware-status-patch`
 - `delete-func-api-health-get`
 - `delete-func-api-ota-get`
+- `delete-func-api-registration-keys-get`
+- `delete-func-api-registration-keys-post`
 - `delete-func-api-users-delete`
 - `delete-func-api-users-get`
 - `delete-func-api-users-patch`
@@ -57,15 +61,19 @@ All of the following must complete before this job runs:
 
 ### Deploy
 
-- `func-api-appconfig-delete`
 - `func-api-appconfig-get`
 - `func-api-appconfig-patch`
+- `func-api-devices-get`
+- `func-api-devices-register-post`
+- `func-api-devices-registration-get`
 - `func-api-firmware-delete`
 - `func-api-firmware-download-get`
 - `func-api-firmware-get`
 - `func-api-firmware-status-patch`
 - `func-api-health-get`
 - `func-api-ota-get`
+- `func-api-registration-keys-get`
+- `func-api-registration-keys-post`
 - `func-api-users-delete`
 - `func-api-users-get`
 - `func-api-users-patch`
