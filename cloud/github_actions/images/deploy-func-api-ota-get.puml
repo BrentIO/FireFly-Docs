@@ -7,12 +7,8 @@ actor "GitHub Actions Runner" as GHA
 
 box "AWS" #ffdbbb
     participant "CloudFormation / SAM" as CF
-    participant "SSM Parameter Store" as SSM
     participant "API Gateway" as APIGW
 end box
-
-GHA -> SSM++ : put-parameter\nFIRMWARE_TYPE_MAP (from GitHub env var)
-SSM --> GHA-- : stored
 
 GHA -> CF++ : describe-stacks\nfirefly-api-gateway\n→ ApiId
 CF --> GHA-- : ApiId
@@ -22,14 +18,9 @@ CF --> GHA-- : CloudFrontDomain
 
 GHA -> CF : SAM build
 
-GHA -> CF++ : SAM deploy\nstack: firefly-func-api-ota-get\nparams: ApiId, CloudFrontDomain,\n        FirmwareTypeMapSsmPath
-CF -> APIGW : Register route\nGET /ota/{product_id}/{application}
+GHA -> CF++ : SAM deploy\nstack: firefly-func-api-ota-get\nparams: ApiId, CloudFrontDomain
+CF -> APIGW : Register route\nGET /ota/{class}/{product_hex}
 CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE
-
-alt FIRMWARE_TYPE_MAP var missing / SSM put-parameter fails
-    SSM --> GHA : AccessDenied / missing value
-    note over GHA : Workflow fails\nVerify FIRMWARE_TYPE_MAP is set\nand IAM permissions are correct
-end
 
 alt cloudfront-firmware stack not found
     CF --> GHA : ValidationError

@@ -106,7 +106,6 @@ The following variables must be configured in each GitHub environment:
 | `CLOUD_FORMATION_EXECUTION_ROLE_NAME` | firefly-cloudformation-execution-role | Name of the execution role. |
 | `CLEANUP_TEST_RECORDS` | true | Deletes all test records in DynamoDB from the integration tests when `true` |
 | `FIRMWARE_DOMAIN_NAME` | firmware.somewhere.com | The domain name for the CloudFront firmware distribution. |
-| `FIRMWARE_TYPE_MAP` | `{"Controller":"FireFly Controller"}` | JSON mapping from URL application name to the firmware type string expected by the device. |
 | `FMC_DOMAIN_NAME` | `fmc.somewhere.com` | The custom domain name for the FireFly Management Console, without the `https://` scheme. |
 
 ## Google Cloud Setup
