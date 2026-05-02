@@ -90,14 +90,14 @@ On successful processing, the function writes a record to the firmware table wit
 
 | Key | Type | Value |
 |---|---|---|
-| `pk` *(partition key)* | String | `{product_id}#{application}` — internal composite key, excluded from API responses |
+| `pk` *(partition key)* | String | `{class}#{product_hex}` — internal composite key, excluded from API responses |
 | `version` *(sort key)* | String | Firmware version string (e.g., `2026.03.001`); error records use `ERROR#{version}#{uuid}` |
 
 **Global Secondary Indexes:**
 
 | Index | Partition Key | Use Case |
 |---|---|---|
-| `product_id-index` | `product_id` | Filter list queries by product |
+| `product_hex-index` | `product_hex` | Filter list queries by product |
 | `zip_name-index` | `zip_name` | Single-item lookups by UUID filename |
 
 **Notable Attributes:**

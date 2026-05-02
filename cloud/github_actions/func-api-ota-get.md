@@ -2,7 +2,9 @@
 
 ## Overview
 
-Manages the Lambda function that serves OTA firmware update checks for devices via `GET /ota/{product_id}/{application}?current_version={version}`. Returns the next sequential `RELEASED` version after the device's current version, not necessarily the latest. Responds `409 Conflict` when the device is running a `REVOKED` version with no newer release available.
+Manages the Lambda function that serves OTA firmware update checks for devices via `GET /ota/{class}/{product_hex}?current_version={version}`. Returns the next sequential `RELEASED` version after the device's current version, not necessarily the latest. Responds `409 Conflict` when the device is running a `REVOKED` version with no newer release available.
+
+The `firmware_type` field is embedded in `manifest.json` at CI build time and stored in DynamoDB by the upload Lambda. This function returns it verbatim — no server-side mapping is required.
 
 ## CloudFormation Stack
 
@@ -47,21 +49,16 @@ None — this workflow has no prerequisites.
 
 ### Description
 
-Before deploying, stores the `FIRMWARE_TYPE_MAP` variable in AWS Systems Manager Parameter Store. Then looks up the API Gateway ID from `firefly-api-gateway` and the CloudFront domain from `firefly-cloudfront-firmware`. Builds and deploys the function with the SSM path, domain, and table name.
-
-The `FIRMWARE_TYPE_MAP` SSM parameter is not managed by CloudFormation and is not deleted when the stack is deleted. Manual cleanup may be required on full teardown.
+Looks up the API Gateway ID from `firefly-api-gateway` and the CloudFront domain from `firefly-cloudfront-firmware`. Builds and deploys the function with the domain and table name.
 
 ### Steps
 
 1. Configure AWS credentials.
-2. Store `FIRMWARE_TYPE_MAP` in SSM Parameter Store (from GitHub environment var).
-3. Look up `ApiId` from the `firefly-api-gateway` stack output.
-4. Look up `CloudFrontDomain` (`DistributionDomain` or `FirmwareDomain`) from the `firefly-cloudfront-firmware` stack output.
-5. SAM build.
-6. SAM deploy with parameters:
+2. Look up `ApiId` from the `firefly-api-gateway` stack output.
+3. Look up `CloudFrontDomain` from the `firefly-cloudfront-firmware` stack output.
+4. SAM deploy with parameters:
    - `ApiId`
    - `CloudFrontDomain`
-   - `FirmwareTypeMapSsmPath`
 
 **Response codes:**
 
@@ -69,7 +66,7 @@ The `FIRMWARE_TYPE_MAP` SSM parameter is not managed by CloudFormation and is no
 |---|---|
 | `200` | Next (or same) RELEASED version found |
 | `400` | `current_version` query parameter missing |
-| `404` | No RELEASED firmware found for this product/application |
+| `404` | No RELEASED firmware found for this class/product_hex |
 | `409` | Device is on a REVOKED version with no newer RELEASED version available |
 
 ### Sequence Diagram
@@ -80,14 +77,12 @@ The `FIRMWARE_TYPE_MAP` SSM parameter is not managed by CloudFormation and is no
 
 ### Description
 
-Runs `sam delete` to remove the CloudFormation stack and the Lambda function. The SSM Parameter Store entry for `FIRMWARE_TYPE_MAP` is not deleted automatically; manual cleanup may be needed.
+Runs `sam delete` to remove the CloudFormation stack and the Lambda function.
 
 ### Steps
 
 1. Configure AWS credentials.
 2. SAM delete `firefly-func-api-ota-get`.
-
-> **Note:** The `FIRMWARE_TYPE_MAP` SSM parameter is not removed by this workflow. Delete it manually if performing a full environment teardown.
 
 ### Sequence Diagram
 
@@ -97,6 +92,6 @@ Runs `sam delete` to remove the CloudFormation stack and the Lambda function. Th
 
 | Scenario | Behavior |
 |---|---|
-| SSM `put-parameter` fails | The deploy step continues, but the function will fail at runtime when reading the firmware type map. Verify IAM permissions and that the `FIRMWARE_TYPE_MAP` var is set in the GitHub environment. |
 | CloudFront stack not deployed | `describe-stacks` call fails; workflow fails before SAM deploy. Deploy `cloudfront-firmware` first. |
-| `FIRMWARE_TYPE_MAP` var missing from GitHub environment | SSM step fails; workflow halts before SAM deploy. |
+| API Gateway stack not deployed | `describe-stacks` call fails; workflow fails before SAM deploy. Deploy `api-gateway` first. |
+| Shared layer ARN unresolvable | SAM build or deploy fails. Deploy `shared-layer` first. |

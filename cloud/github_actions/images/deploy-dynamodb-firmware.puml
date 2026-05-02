@@ -12,7 +12,7 @@ end box
 
 GHA -> CF : SAM build\ntemplate: templates/dynamodb-firmware.yaml
 GHA -> CF++ : SAM deploy\nstack: firefly-dynamodb-firmware
-CF -> DDB++ : Create table\npk (partition key), version (sort key)\nTTL attribute: ttl\nGSIs: product_id-index, zip_name-index
+CF -> DDB++ : Create table\npk (partition key), version (sort key)\nTTL attribute: ttl\nGSIs: product_hex-index, zip_name-index
 DDB --> CF-- : Table ACTIVE
 CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE
 

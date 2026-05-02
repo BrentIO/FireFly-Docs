@@ -183,7 +183,6 @@ Secrets and variables must be set at the **environment** level, not at the repos
 | `CLOUD_FORMATION_EXECUTION_ROLE_NAME` | `firefly-cloudformation-execution-role` |
 | `CONFIGURATOR_DOMAIN_NAME` | `configurator.dev.fireflylx.com` |
 | `FIRMWARE_DOMAIN_NAME` | `firmware.dev.fireflylx.com` |
-| `FIRMWARE_TYPE_MAP` | `{"Controller":"FireFly Controller"}` |
 | `FMC_DOMAIN_NAME` | `fmc.dev.fireflylx.com` |
 
 ### `production` Environment — Secrets
@@ -202,7 +201,6 @@ Same as `dev`, using FireFly-PROD account values.
 | `CLOUD_FORMATION_EXECUTION_ROLE_NAME` | `firefly-cloudformation-execution-role` |
 | `CONFIGURATOR_DOMAIN_NAME` | `configurator.fireflylx.com` |
 | `FIRMWARE_DOMAIN_NAME` | `firmware.fireflylx.com` |
-| `FIRMWARE_TYPE_MAP` | `{"Controller":"FireFly Controller"}` |
 | `FMC_DOMAIN_NAME` | `fmc.fireflylx.com` |
 
 ---

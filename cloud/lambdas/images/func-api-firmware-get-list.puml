@@ -11,17 +11,17 @@ box "AWS" #ffdbbb
     database DynamoDB
 end box
 
-Client -> APIGW++ : GET /firmware[?product_id=...][&version=...]
+Client -> APIGW++ : GET /firmware[?product_hex=...][&version=...]
 APIGW -> Lambda++ : invoke
 
 alt no query filters
     Lambda -> DynamoDB++ : Scan (all items)
     DynamoDB --> Lambda-- : items[]
-else filtered by product_id
-    Lambda -> DynamoDB++ : Query GSI product_id-index\nKeyCondition: product_id = "{product_id}"
+else filtered by product_hex
+    Lambda -> DynamoDB++ : Query GSI product_hex-index\nKeyCondition: product_hex = "{product_hex}"
     DynamoDB --> Lambda-- : items[]
-else filtered by product_id and version
-    Lambda -> DynamoDB++ : Query GSI product_id-index\nKeyCondition: product_id = "{product_id}"\nFilterExpression: version = "{version}"
+else filtered by product_hex and version
+    Lambda -> DynamoDB++ : Query GSI product_hex-index\nKeyCondition: product_hex = "{product_hex}"\nFilterExpression: version = "{version}"
     DynamoDB --> Lambda-- : items[] (may contain multiple builds)
 end
 

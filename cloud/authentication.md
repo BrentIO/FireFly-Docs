@@ -50,7 +50,7 @@ All API endpoints require a valid Cognito JWT access token except:
 
 | Endpoint | Auth Required | Reason |
 |---|---|---|
-| `GET /ota/{product_id}/{application}` | No | Called directly by devices |
+| `GET /ota/{class}/{product_hex}` | No | Called directly by devices |
 | `GET /health` | No | Infrastructure monitoring |
 | All other endpoints | Yes | Management console only |
 
