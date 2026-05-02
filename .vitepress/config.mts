@@ -296,7 +296,7 @@ export default defineConfig({
             items: [
               {
                 text: 'FireFly Management Console',
-                link: '/cloud/ui',
+                link: '/cloud/fmc',
                 collapsed: true,
                 items: [
                   {
@@ -428,8 +428,8 @@ export default defineConfig({
                         link: '/cloud/github_actions/cloudfront-firmware'
                       },
                       {
-                        text: 'cloudfront-ui',
-                        link: '/cloud/github_actions/cloudfront-ui'
+                        text: 'cloudfront-fmc',
+                        link: '/cloud/github_actions/cloudfront-fmc'
                       },
                       {
                         text: 'cognito',
@@ -552,16 +552,16 @@ export default defineConfig({
                         link: '/cloud/github_actions/s3-firmware-public'
                       },
                       {
-                        text: 's3-ui',
-                        link: '/cloud/github_actions/s3-ui'
+                        text: 's3-fmc',
+                        link: '/cloud/github_actions/s3-fmc'
                       },
                       {
                         text: 'shared-layer',
                         link: '/cloud/github_actions/shared-layer'
                       },
                       {
-                        text: 'ui-app',
-                        link: '/cloud/github_actions/ui-app'
+                        text: 'fmc-app',
+                        link: '/cloud/github_actions/fmc-app'
                       },
                     ]
                   },

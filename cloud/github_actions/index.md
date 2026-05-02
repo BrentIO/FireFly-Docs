@@ -12,7 +12,7 @@ GitHub Actions workflows that deploy and delete all FireFly-Cloud AWS infrastruc
 | [api-gateway](./api-gateway.md) | `firefly-api-gateway` | HTTP API Gateway with custom domain, Cognito JWT authorizer, CORS |
 | [cloudfront-configurator](./cloudfront-configurator.md) | `firefly-configurator-cloudfront` | CloudFront distribution + Route 53 alias for the Configurator UI |
 | [cloudfront-firmware](./cloudfront-firmware.md) | `firefly-cloudfront-firmware` | CloudFront distribution + Route 53 alias for firmware OTA delivery |
-| [cloudfront-ui](./cloudfront-ui.md) | `firefly-cloudfront-ui` | CloudFront distribution + Route 53 alias for the web UI |
+| [cloudfront-fmc](./cloudfront-fmc.md) | `firefly-cloudfront-fmc` | CloudFront distribution + Route 53 alias for the FMC |
 | [cognito](./cognito.md) | `firefly-cognito` | Cognito User Pool with Google IdP, custom domain, pre-signup Lambda |
 | [configurator-ui](./configurator-ui.md) | — | Builds and syncs the Configurator UI to S3; invalidates CloudFront cache |
 | [dynamodb-devices](./dynamodb-devices.md) | `firefly-dynamodb-devices` | DynamoDB table for registered device records |
@@ -42,9 +42,9 @@ GitHub Actions workflows that deploy and delete all FireFly-Cloud AWS infrastruc
 | [s3-configurator](./s3-configurator.md) | `firefly-configurator-s3` | S3 bucket for Configurator UI static assets |
 | [s3-firmware](./s3-firmware.md) | `firefly-s3-firmware` | Private S3 bucket for firmware ZIP processing pipeline |
 | [s3-firmware-public](./s3-firmware-public.md) | `firefly-s3-firmware-public` | Public S3 bucket for released firmware binaries (behind CloudFront) |
-| [s3-ui](./s3-ui.md) | `firefly-s3-ui` | S3 bucket for web UI static assets |
+| [s3-fmc](./s3-fmc.md) | `firefly-s3-fmc` | S3 bucket for FMC static assets |
 | [shared-layer](./shared-layer.md) | `firefly-shared-layer` | Lambda layer: shared Python modules (logging, AppConfig, feature flags) |
-| [ui-app](./ui-app.md) | `firefly-ui-app` | Builds and syncs the web UI to S3; invalidates CloudFront cache |
+| [fmc-app](./fmc-app.md) | — | Builds and syncs the FMC to S3; invalidates CloudFront cache |
 | deploy-all | — | Orchestrates full deploy in dependency order |
 | delete-all | — | Orchestrates full teardown in reverse-dependency order |
 
@@ -64,11 +64,11 @@ Deployments run in parallel within each wave. A job only starts after all jobs i
 | shared-layer | — |
 | s3-configurator | — |
 | s3-firmware-public | — |
-| s3-ui | — |
+| s3-fmc | — |
 | func-cognito-pre-signup | dynamodb-users |
 | cloudfront-configurator | acm, s3-configurator |
 | cloudfront-firmware | acm, s3-firmware-public |
-| cloudfront-ui | acm, s3-ui |
+| cloudfront-fmc | acm, s3-fmc |
 | cognito | acm, func-cognito-pre-signup |
 | api-gateway | acm, cognito |
 | func-api-health-get | api-gateway |
@@ -84,7 +84,7 @@ Deployments run in parallel within each wave. A job only starts after all jobs i
 | func-api-ota-get | api-gateway, shared-layer, cloudfront-firmware |
 | func-api-firmware-download-get | api-gateway, shared-layer, s3-firmware |
 | s3-firmware | func-s3-firmware-uploaded, func-s3-firmware-deleted |
-| ui-app | cloudfront-ui, cognito |
+| fmc-app | cloudfront-fmc, cognito |
 | func-api-appconfig-get | api-gateway |
 | func-api-appconfig-patch | api-gateway |
 | func-api-devices-register-post | api-gateway, dynamodb-devices, dynamodb-registration-keys, shared-layer |
@@ -92,7 +92,7 @@ Deployments run in parallel within each wave. A job only starts after all jobs i
 | func-api-devices-get | api-gateway, dynamodb-devices, shared-layer |
 | func-api-registration-keys-post | api-gateway, dynamodb-registration-keys, shared-layer |
 | func-api-registration-keys-get | api-gateway, dynamodb-registration-keys, shared-layer |
-| run-integration-tests | s3-firmware, func-api-firmware-get, func-api-firmware-status-patch, func-api-firmware-delete, func-api-health-get, func-api-ota-get, func-api-firmware-download-get, func-api-users-get, func-api-users-post, func-api-users-delete, func-api-users-patch, func-api-appconfig-get, func-api-appconfig-patch, func-api-devices-register-post, func-api-devices-registration-get, func-api-devices-get, func-api-registration-keys-post, func-api-registration-keys-get, ui-app |
+| run-integration-tests | s3-firmware, func-api-firmware-get, func-api-firmware-status-patch, func-api-firmware-delete, func-api-health-get, func-api-ota-get, func-api-firmware-download-get, func-api-users-get, func-api-users-post, func-api-users-delete, func-api-users-patch, func-api-appconfig-get, func-api-appconfig-patch, func-api-devices-register-post, func-api-devices-registration-get, func-api-devices-get, func-api-registration-keys-post, func-api-registration-keys-get, fmc-app |
 
 ---
 
@@ -100,7 +100,7 @@ Deployments run in parallel within each wave. A job only starts after all jobs i
 
 | Job | Needs |
 |---|---|
-| delete-ui-app | — |
+| delete-fmc-app | — |
 | delete-dynamodb-firmware | — |
 | delete-s3-firmware | — |
 | delete-cloudfront-configurator | — |
@@ -122,14 +122,14 @@ Deployments run in parallel within each wave. A job only starts after all jobs i
 | delete-func-api-devices-get | — |
 | delete-func-api-registration-keys-post | — |
 | delete-func-api-registration-keys-get | — |
-| delete-cloudfront-ui | delete-ui-app |
+| delete-cloudfront-fmc | delete-fmc-app |
 | delete-s3-configurator | delete-cloudfront-configurator |
-| delete-s3-ui | delete-cloudfront-ui |
+| delete-s3-fmc | delete-cloudfront-fmc |
 | delete-s3-firmware-public | delete-cloudfront-firmware |
 | delete-api-gateway | delete-func-api-health-get, delete-func-api-firmware-get, delete-func-api-firmware-status-patch, delete-func-api-firmware-delete, delete-func-api-ota-get, delete-func-api-firmware-download-get, delete-func-api-users-get, delete-func-api-users-post, delete-func-api-users-delete, delete-func-api-users-patch, delete-func-api-appconfig-get, delete-func-api-appconfig-patch, delete-func-api-devices-register-post, delete-func-api-devices-registration-get, delete-func-api-devices-get, delete-func-api-registration-keys-post, delete-func-api-registration-keys-get |
 | delete-cognito | delete-api-gateway |
 | delete-func-cognito-pre-signup | delete-cognito |
-| delete-acm | delete-api-gateway, delete-cloudfront-configurator, delete-cloudfront-firmware, delete-cloudfront-ui, delete-cognito |
+| delete-acm | delete-api-gateway, delete-cloudfront-configurator, delete-cloudfront-firmware, delete-cloudfront-fmc, delete-cognito |
 | delete-dynamodb-users | delete-func-cognito-pre-signup, delete-func-api-users-delete, delete-func-api-users-post |
 | delete-dynamodb-devices | delete-func-api-devices-register-post, delete-func-api-devices-registration-get, delete-func-api-devices-get |
 | delete-dynamodb-registration-keys | delete-func-api-devices-register-post, delete-func-api-registration-keys-post, delete-func-api-registration-keys-get |

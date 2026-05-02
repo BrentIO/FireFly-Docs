@@ -1,7 +1,7 @@
 @startuml
 !include ../../../images/common-sequence.iuml
 
-title deploy-ui-app\n(GitHub Action → S3 + CloudFront)
+title deploy-fmc-app\n(GitHub Action → S3 + CloudFront)
 
 actor "GitHub Actions Runner" as GHA
 
@@ -14,10 +14,10 @@ end box
 GHA -> CF++ : describe-stacks\nfirefly-cognito → CognitoClientId
 CF --> GHA-- : CognitoClientId
 
-GHA -> CF++ : describe-stacks\nfirefly-cloudfront-ui → CloudFrontDistributionId
+GHA -> CF++ : describe-stacks\nfirefly-cloudfront-fmc → CloudFrontDistributionId
 CF --> GHA-- : CloudFrontDistributionId
 
-GHA -> CF++ : describe-stacks\nfirefly-s3-ui → BucketName
+GHA -> CF++ : describe-stacks\nfirefly-s3-fmc → BucketName
 CF --> GHA-- : BucketName
 
 note over GHA : npm ci (ui/ directory)

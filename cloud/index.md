@@ -41,8 +41,8 @@ The environment is composed of multiple CloudFormation stacks, each managed by i
 | `firefly-func-s3-firmware-deleted` | S3 delete event handler |
 | `firefly-func-api-ota-get` | OTA firmware manifest endpoint |
 | `firefly-func-api-firmware-download-get` | Pre-signed URL endpoint for downloading firmware ZIPs from the private bucket |
-| `firefly-s3-ui` | Private S3 bucket for the UI static files |
-| `firefly-cloudfront-ui` | CloudFront distribution serving the firmware management UI SPA |
+| `firefly-s3-fmc` | Private S3 bucket for the FMC static files |
+| `firefly-cloudfront-fmc` | CloudFront distribution serving the FireFly Management Console SPA |
 | `firefly-configurator-s3` | Private S3 bucket for the Configurator UI static files |
 | `firefly-configurator-cloudfront` | CloudFront distribution serving the Configurator UI SPA |
 

@@ -1,7 +1,7 @@
 @startuml
 !include ../../../images/common-sequence.iuml
 
-title deploy-cloudfront-ui\n(GitHub Action → CloudFormation)
+title deploy-cloudfront-fmc\n(GitHub Action → CloudFormation)
 
 actor "GitHub Actions Runner" as GHA
 
@@ -15,12 +15,12 @@ end box
 GHA -> CFLookup++ : aws cloudformation describe-stacks\nstack: firefly-acm\noutput: CertificateArn
 CFLookup --> GHA-- : CertificateArn
 
-GHA -> CF : SAM build\ntemplate: templates/cloudfront-ui.yaml
-GHA -> CF++ : SAM deploy\nstack: firefly-cloudfront-ui\nparams: UiBucketName, CertificateArn,\nUiDomain, HostedZoneId
-CF -> CFront++ : Create distribution\norigins: s3-ui\nalternate domain: UiDomain\ncertificate: CertificateArn
+GHA -> CF : SAM build\ntemplate: templates/cloudfront-fmc.yaml
+GHA -> CF++ : SAM deploy\nstack: firefly-cloudfront-fmc\nparams: FmcBucketName, CertificateArn,\nFmcDomain, HostedZoneId
+CF -> CFront++ : Create distribution\norigins: s3-fmc\nalternate domain: FmcDomain\ncertificate: CertificateArn
 note over CFront : Distribution propagation\ntakes 15-20 minutes
 CFront --> CF-- : Distribution created\nDomainName (*.cloudfront.net)
-CF -> R53 : Create Route 53 ALIAS record\nUiDomain → CloudFront domain
+CF -> R53 : Create Route 53 ALIAS record\nFmcDomain → CloudFront domain
 R53 --> CF : Record created
 CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE
 

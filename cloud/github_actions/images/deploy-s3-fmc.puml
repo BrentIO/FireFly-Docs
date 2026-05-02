@@ -1,7 +1,7 @@
 @startuml
 !include ../../../images/common-sequence.iuml
 
-title deploy-s3-ui\n(GitHub Action → CloudFormation)
+title deploy-s3-fmc\n(GitHub Action → CloudFormation)
 
 actor "GitHub Actions Runner" as GHA
 
@@ -10,9 +10,9 @@ box "AWS" #ffdbbb
     collections "S3" as S3
 end box
 
-GHA -> CF : SAM build\ntemplate: templates/s3-ui.yaml
-GHA -> CF++ : SAM deploy\nstack: firefly-s3-ui\nparams: BucketName (from secrets)
-CF -> S3++ : Create bucket\n(web UI static assets)
+GHA -> CF : SAM build\ntemplate: templates/s3-fmc.yaml
+GHA -> CF++ : SAM deploy\nstack: firefly-s3-fmc\nparams: BucketName (from secrets)
+CF -> S3++ : Create bucket\n(FMC static assets)
 S3 --> CF-- : Bucket created
 CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE
 

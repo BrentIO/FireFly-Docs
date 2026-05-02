@@ -20,7 +20,7 @@ Before creating anything in AWS, update the placeholder values in the policy fil
 - `AWS_REGION` — the region you plan to deploy to.
 - `S3_FIRMWARE_PRIVATE_BUCKET_NAME` — the S3 bucket name you plan to use to store firmware ZIPs.
 - `S3_FIRMWARE_PUBLIC_BUCKET_NAME` — the S3 bucket name you plan to use for public OTA firmware delivery.
-- `S3_UI_BUCKET_NAME` — the S3 bucket name you plan to use for the UI static files.
+- `S3_FMC_BUCKET_NAME` — the S3 bucket name you plan to use for the FMC static files.
 - `S3_SAM_DEPLOYMENT_BUCKET_NAME` — the name of the S3 bucket where CloudFormation deployment templates will be stored.
 - `ROUTE_53_HOSTED_ZONE_ID` — the Hosted Zone ID for your Route 53 instance.
 
@@ -90,7 +90,7 @@ The following secrets must be configured in each GitHub environment:
 | `ROUTE_53_HOSTED_ZONE_ID` | AB1234567 | The Hosted Zone ID for your Route 53 instance. |
 | `S3_FIRMWARE_PRIVATE_BUCKET_NAME` | my-firmware-private | The S3 bucket name for storing firmware ZIPs (private). |
 | `S3_FIRMWARE_PUBLIC_BUCKET_NAME` | my-firmware-public | The S3 bucket name for OTA firmware binary delivery (public). |
-| `S3_UI_BUCKET_NAME` | my-firefly-ui | The S3 bucket name for the UI static files (private, served via CloudFront). |
+| `S3_FMC_BUCKET_NAME` | my-firefly-fmc | The S3 bucket name for the FMC static files (private, served via CloudFront). |
 | `S3_SAM_DEPLOYMENT_BUCKET_NAME` | my-sam-deployment-bucket | The name of the bucket where deployment templates will be stored. |
 
 ### GitHub Variables
@@ -107,7 +107,7 @@ The following variables must be configured in each GitHub environment:
 | `CLEANUP_TEST_RECORDS` | true | Deletes all test records in DynamoDB from the integration tests when `true` |
 | `FIRMWARE_DOMAIN_NAME` | firmware.somewhere.com | The domain name for the CloudFront firmware distribution. |
 | `FIRMWARE_TYPE_MAP` | `{"Controller":"FireFly Controller"}` | JSON mapping from URL application name to the firmware type string expected by the device. |
-| `UI_DOMAIN_NAME` | `ui.somewhere.com` | The custom domain name for the firmware management UI, without the `https://` scheme. |
+| `FMC_DOMAIN_NAME` | `fmc.somewhere.com` | The custom domain name for the FireFly Management Console, without the `https://` scheme. |
 
 ## Google Cloud Setup
 
@@ -148,7 +148,7 @@ For a complete list of individual deploy and delete workflows with descriptions 
 
 ### Integration Tests
 
-The **Run Integration Tests** (`run-integration-tests`) workflow can be run independently to validate a deployed environment without making any changes.  It looks up the API URL from the `firefly-api-gateway` stack output and the UI URL from the `firefly-cloudfront-ui` stack output, then runs the test suite against the live environment.  UI tests are automatically skipped if the `firefly-cloudfront-ui` stack does not exist.
+The **Run Integration Tests** (`run-integration-tests`) workflow can be run independently to validate a deployed environment without making any changes.  It looks up the API URL from the `firefly-api-gateway` stack output and the FMC URL from the `firefly-cloudfront-fmc` stack output, then runs the test suite against the live environment.  UI tests are automatically skipped if the `firefly-cloudfront-ui` stack does not exist.
 
 AppConfig tests are excluded by default because they trigger AWS AppConfig deployments and add significant time to the run.  To include them, check **Include AppConfig tests** when triggering the workflow manually.
 
@@ -168,8 +168,8 @@ pip install -r tests/requirements.txt
 |---|---|---|
 | `FIREFLY_API_URL` | No | API base URL (defaults to the production URL if not set) |
 | `FIREFLY_FIRMWARE_BUCKET` | For upload tests | Private S3 firmware bucket name |
-| `FIREFLY_UI_URL` | For UI and CORS tests | Base URL of the firmware management UI (e.g. `https://ui.example.com`) |
-| `FIREFLY_UI_BUCKET` | For UI S3 tests | Name of the private S3 bucket serving the UI static files |
+| `FIREFLY_FMC_URL` | For UI and CORS tests | Base URL of the FMC (e.g. `https://fmc.example.com`) |
+| `FIREFLY_FMC_BUCKET` | For UI S3 tests | Name of the private S3 bucket serving the FMC static files |
 | `FIREFLY_COGNITO_USER_POOL_ID` | For auth tests | Cognito User Pool ID |
 | `FIREFLY_COGNITO_CLIENT_ID` | For auth tests | Cognito App Client ID |
 | `FIREFLY_TEST_USER_EMAIL` | For auth tests | Email of an existing Cognito test user. |

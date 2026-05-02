@@ -1,7 +1,7 @@
 @startuml
 !include ../../../images/common-sequence.iuml
 
-title delete-ui-app\n(GitHub Action → S3)
+title delete-fmc-app\n(GitHub Action → S3)
 
 actor "GitHub Actions Runner" as GHA
 
@@ -10,14 +10,11 @@ box "AWS" #ffdbbb
     participant "S3" as S3
 end box
 
-GHA -> CF++ : describe-stacks\nfirefly-s3-ui → BucketName
-CF --> GHA-- : BucketName
-
-GHA -> S3++ : aws s3 rm s3://{BucketName}\n--recursive
+GHA -> S3++ : aws s3 rm s3://{S3_FMC_BUCKET_NAME}\n--recursive
 S3 --> GHA-- : Objects deleted
 
-alt firefly-s3-ui stack not found
-    CF --> GHA : Stack not found
+alt Bucket does not exist
+    S3 --> GHA : NoSuchBucket
     note over GHA : Workflow exits 0 (idempotent)
 end
 

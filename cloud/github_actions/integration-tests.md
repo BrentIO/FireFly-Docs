@@ -21,7 +21,7 @@ Runs the pytest integration test suite against a fully-deployed FireFly-Cloud en
 | [func-api-users-post](./func-api-users-post.md) | POST /users endpoint must be live |
 | [func-api-users-delete](./func-api-users-delete.md) | DELETE /users/{user_id} endpoint must be live |
 | [func-api-users-patch](./func-api-users-patch.md) | PATCH /users/{user_id} endpoint must be live |
-| [ui-app](./ui-app.md) | UI must be deployed for UI smoke tests |
+| [fmc-app](./fmc-app.md) | FMC must be deployed for UI smoke tests |
 
 ### Delete Dependencies
 
@@ -54,7 +54,7 @@ Resolves runtime endpoints and configuration by querying CloudFormation stack ou
 1. Checkout repository.
 2. Configure AWS credentials.
 3. Look up `ApiUrl` from the `firefly-api-gateway` stack output.
-4. Look up UI CloudFront domain from the `firefly-cloudfront-ui` stack output (optional).
+4. Look up FMC CloudFront domain from the `firefly-cloudfront-fmc` stack output (optional).
 5. Look up `UserPoolId` and `ClientId` from the `firefly-cognito` stack output (optional).
 6. Look up `UsersTableName` from the `firefly-dynamodb-users` stack output (optional).
 7. Generate transient CI credentials — a unique `ci-test-{random_hex}@test.firefly.local` email and a cryptographically random password are created at runtime. The password is masked immediately with `::add-mask::` and never appears in logs or stored anywhere.
@@ -69,8 +69,8 @@ Resolves runtime endpoints and configuration by querying CloudFormation stack ou
 |---|---|
 | `FIREFLY_API_URL` | `firefly-api-gateway` stack output (`ApiUrl`) |
 | `FIREFLY_FIRMWARE_BUCKET` | From secrets |
-| `FIREFLY_UI_URL` | `firefly-cloudfront-ui` stack output (optional) |
-| `FIREFLY_UI_BUCKET` | From secrets |
+| `FIREFLY_FMC_URL` | `firefly-cloudfront-fmc` stack output (optional) |
+| `FIREFLY_FMC_BUCKET` | From secrets |
 | `FIREFLY_COGNITO_USER_POOL_ID` | `firefly-cognito` stack output (optional) |
 | `FIREFLY_COGNITO_CLIENT_ID` | `firefly-cognito` stack output (optional) |
 | `FIREFLY_TEST_USER_EMAIL` | Generated at runtime (transient) |
