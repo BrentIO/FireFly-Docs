@@ -29,7 +29,7 @@ GitHub Actions workflows that deploy and delete all FireFly-Cloud AWS infrastruc
 | [func-api-firmware-get](./func-api-firmware-get.md) | `firefly-func-api-firmware-get` | Lambda: GET /firmware, GET /firmware/{zip_name} |
 | [func-api-firmware-status-patch](./func-api-firmware-status-patch.md) | `firefly-func-api-firmware-status-patch` | Lambda: PATCH /firmware/{zip_name}/status |
 | [func-api-health-get](./func-api-health-get.md) | `firefly-func-api-health-get` | Lambda: GET /health |
-| [func-api-ota-get](./func-api-ota-get.md) | `firefly-func-api-ota-get` | Lambda: GET /ota/{product_id}/{application} |
+| [func-api-ota-get](./func-api-ota-get.md) | `firefly-func-api-ota-get` | Lambda: GET /ota/{class}/{product_hex} |
 | [func-api-registration-keys-get](./func-api-registration-keys-get.md) | `firefly-func-api-registration-keys-get` | Lambda: GET /registration-keys |
 | [func-api-registration-keys-post](./func-api-registration-keys-post.md) | `firefly-func-api-registration-keys-post` | Lambda: POST /registration-keys |
 | [func-api-users-delete](./func-api-users-delete.md) | `firefly-func-api-users-delete` | Lambda: DELETE /users/{username} |

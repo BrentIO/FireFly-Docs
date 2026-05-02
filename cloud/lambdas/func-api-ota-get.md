@@ -12,7 +12,7 @@ See the [OTA Update Flow](/cloud/ota_update_flow) for full scenario documentatio
 
 ## Invocation
 
-Invoked by **API Gateway** on an HTTP `GET /ota/{product_id}/{application}` request.
+Invoked by **API Gateway** on an HTTP `GET /ota/{class}/{product_hex}` request.
 
 ## Sequence Diagram
 
@@ -22,7 +22,7 @@ Invoked by **API Gateway** on an HTTP `GET /ota/{product_id}/{application}` requ
 
 | Method | Path | Description |
 |---|---|---|
-| `GET` | `/ota/{product_id}/{application}?current_version={version}` | Returns the OTA manifest for the next released firmware version |
+| `GET` | `/ota/{class}/{product_hex}?current_version={version}` | Returns the OTA manifest for the next released firmware version |
 
 See the [API Reference](/cloud/api_reference) for full schema documentation.
 
@@ -32,7 +32,7 @@ The response is a manifest compatible with the [BrentIO/esp32FOTA](https://githu
 
 | Field | Required | Description |
 |---|---|---|
-| `type` | Yes | Firmware type string expected by the device (e.g., `"FireFly Controller"`) |
+| `type` | Yes | Firmware type string expected by the device (e.g., `"FireFly Controller"`) — stored in DynamoDB from `manifest.json` at build time |
 | `version` | Yes | Firmware version string (e.g., `"2026.03.001"`) |
 | `url` | Yes | CloudFront URL to the main application firmware binary |
 | `littlefs` | No | CloudFront URL to the LittleFS partition image; omitted if not present in the firmware |
@@ -41,14 +41,14 @@ The response is a manifest compatible with the [BrentIO/esp32FOTA](https://githu
 {
     "type": "FireFly Controller",
     "version": "2026.03.001",
-    "url": "https://firmware.somewhere.com/FFC3232-2603/Controller/2026.03.001/Controller.ino.bin",
-    "littlefs": "https://firmware.somewhere.com/FFC3232-2603/Controller/2026.03.001/www.bin"
+    "url": "https://firmware.somewhere.com/controller/0x32322505/2026.03.001/Controller.ino.bin",
+    "littlefs": "https://firmware.somewhere.com/controller/0x32322505/2026.03.001/www.bin"
 }
 ```
 
 ## Binary Identification
 
-The function uses the following rules to identify firmware binaries from the released record's file list:
+The function uses the `main_binary` field stored in DynamoDB (set by the upload Lambda from the manifest file list) to construct the `url`. For `littlefs`, it searches the file list for `www.bin`.
 
 | File | Identified as |
 |---|---|
@@ -59,11 +59,9 @@ The function uses the following rules to identify firmware binaries from the rel
 | `*.partitions.bin` | Excluded — not OTA-updatable |
 | Any other `*.bin` | Main application firmware (`url` field) |
 
-## Firmware Type Mapping
+## Firmware Type
 
-The `type` field in the manifest must match the `APPLICATION_NAME` constant on the device firmware. The mapping from URL `application` path parameter to firmware type string is configured via the `FIRMWARE_TYPE_MAP` Lambda environment variable (a JSON object).
-
-For example: `{"Controller": "FireFly Controller"}` maps the URL path segment `Controller` to the firmware type string `"FireFly Controller"` expected by the device.
+The `type` field in the OTA manifest is stored in DynamoDB as `firmware_type`, populated from `manifest.json` at CI build time. The value must match the `HARDWARE_CLASS` or application type constant compiled into the device firmware. No server-side mapping is required.
 
 ## Deployment
 
