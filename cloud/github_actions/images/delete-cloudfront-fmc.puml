@@ -1,7 +1,7 @@
 @startuml
 !include ../../../images/common-sequence.iuml
 
-title delete-cloudfront-ui\n(GitHub Action → CloudFormation)
+title delete-cloudfront-fmc\n(GitHub Action → CloudFormation)
 
 actor "GitHub Actions Runner" as GHA
 
@@ -11,9 +11,9 @@ box "AWS" #ffdbbb
     participant "Route 53" as R53
 end box
 
-note over GHA : Prerequisite: delete-ui-app must\ncomplete before this job runs.
+note over GHA : Prerequisite: delete-fmc-app must\ncomplete before this job runs.
 
-GHA -> CF++ : sam delete\nstack: firefly-cloudfront-ui\n--no-prompts --region
+GHA -> CF++ : sam delete\nstack: firefly-cloudfront-fmc\n--no-prompts --region
 CF -> R53 : Delete Route 53 ALIAS record
 R53 --> CF : Record deleted
 CF -> CFront++ : Disable and delete distribution

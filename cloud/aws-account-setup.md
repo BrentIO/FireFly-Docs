@@ -168,7 +168,7 @@ Secrets and variables must be set at the **environment** level, not at the repos
 | `S3_FIRMWARE_PRIVATE_BUCKET_NAME` | Your chosen name for the private firmware bucket |
 | `S3_FIRMWARE_PUBLIC_BUCKET_NAME` | Your chosen name for the public firmware bucket |
 | `S3_CONFIGURATOR_BUCKET_NAME` | Your chosen name for the configurator static files bucket |
-| `S3_UI_BUCKET_NAME` | Your chosen name for the UI static files bucket |
+| `S3_FMC_BUCKET_NAME` | Your chosen name for the FMC static files bucket |
 | `S3_SAM_DEPLOYMENT_BUCKET_NAME` | SAM bucket created in Step 3.2 |
 
 ### `dev` Environment — Variables
@@ -184,7 +184,7 @@ Secrets and variables must be set at the **environment** level, not at the repos
 | `CONFIGURATOR_DOMAIN_NAME` | `configurator.dev.fireflylx.com` |
 | `FIRMWARE_DOMAIN_NAME` | `firmware.dev.fireflylx.com` |
 | `FIRMWARE_TYPE_MAP` | `{"Controller":"FireFly Controller"}` |
-| `UI_DOMAIN_NAME` | `ui.dev.fireflylx.com` |
+| `FMC_DOMAIN_NAME` | `fmc.dev.fireflylx.com` |
 
 ### `production` Environment — Secrets
 
@@ -203,7 +203,7 @@ Same as `dev`, using FireFly-PROD account values.
 | `CONFIGURATOR_DOMAIN_NAME` | `configurator.fireflylx.com` |
 | `FIRMWARE_DOMAIN_NAME` | `firmware.fireflylx.com` |
 | `FIRMWARE_TYPE_MAP` | `{"Controller":"FireFly Controller"}` |
-| `UI_DOMAIN_NAME` | `ui.fireflylx.com` |
+| `FMC_DOMAIN_NAME` | `fmc.fireflylx.com` |
 
 ---
 

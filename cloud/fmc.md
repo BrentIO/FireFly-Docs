@@ -1,6 +1,6 @@
-# Firmware Management UI
+# FireFly Management Console
 
-The firmware management UI is a Vue 3 single-page application (SPA) that provides a web interface for managing the firmware lifecycle.  It is served from a private S3 bucket via a CloudFront distribution.
+The FireFly Management Console (FMC) is a Vue 3 single-page application (SPA) that provides a web interface for managing the firmware lifecycle.  It is served from a private S3 bucket via a CloudFront distribution.
 
 ## Features
 
@@ -113,16 +113,16 @@ The download link in the firmware detail modal is lazy — the pre-signed URL is
 
 ## Infrastructure
 
-The UI is hosted on AWS using two CloudFormation stacks:
+The FMC is hosted on AWS using two CloudFormation stacks:
 
 | Stack | Description |
 |---|---|
-| `firefly-s3-ui` | Private S3 bucket for UI static files; no public access |
-| `firefly-cloudfront-ui` | CloudFront OAC distribution with custom domain, HTTPS, and SPA routing (403/404 → `index.html`) |
+| `firefly-s3-fmc` | Private S3 bucket for FMC static files; no public access |
+| `firefly-cloudfront-fmc` | CloudFront OAC distribution with custom domain, HTTPS, and SPA routing (403/404 → `index.html`) |
 
 ## Deploying
 
-The UI is built and deployed by the `deploy-ui-app` GitHub Actions workflow.  It requires the `firefly-s3-ui` and `firefly-cloudfront-ui` stacks to already exist.
+The FMC is built and deployed by the `deploy-fmc-app` GitHub Actions workflow.  It requires the `firefly-s3-fmc` and `firefly-cloudfront-fmc` stacks to already exist.
 
 The workflow:
 1. Installs Node 20 dependencies (`npm ci`)

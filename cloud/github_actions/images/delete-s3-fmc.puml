@@ -1,7 +1,7 @@
 @startuml
 !include ../../../images/common-sequence.iuml
 
-title delete-s3-ui\n(GitHub Action → CloudFormation)
+title delete-s3-fmc\n(GitHub Action → CloudFormation)
 
 actor "GitHub Actions Runner" as GHA
 
@@ -10,12 +10,12 @@ box "AWS" #ffdbbb
     collections "S3" as S3
 end box
 
-note over GHA : Prerequisite: delete-cloudfront-ui must\ncomplete before this job runs\n(which requires delete-ui-app first).
+note over GHA : Prerequisite: delete-cloudfront-fmc must\ncomplete before this job runs\n(which requires delete-fmc-app first).
 
 GHA -> S3 : Delete all objects (recursive)
 S3 --> GHA : Bucket empty
 
-GHA -> CF++ : sam delete\nstack: firefly-s3-ui\n--no-prompts --region
+GHA -> CF++ : sam delete\nstack: firefly-s3-fmc\n--no-prompts --region
 CF -> S3 : Delete bucket
 S3 --> CF : Bucket deleted
 CF --> GHA-- : DELETE_COMPLETE

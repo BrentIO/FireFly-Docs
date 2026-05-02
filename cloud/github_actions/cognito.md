@@ -27,7 +27,7 @@ Provisions the Cognito User Pool with Google IdP federation, a custom auth domai
 - `func-api-users-get` — needs Cognito for user lookup
 - `func-api-users-delete` — needs Cognito for user deletion
 - `func-api-users-patch` — needs Cognito for user updates
-- `ui-app` — needs User Pool Client ID for UI auth configuration
+- `fmc-app` — needs User Pool Client ID for FMC auth configuration
 
 ### Delete
 
