@@ -69,8 +69,8 @@ Resolves runtime endpoints and configuration by querying CloudFormation stack ou
 |---|---|
 | `FIREFLY_API_URL` | `firefly-api-gateway` stack output (`ApiUrl`) |
 | `FIREFLY_FIRMWARE_BUCKET` | From secrets |
-| `FIREFLY_UI_URL` | `firefly-cloudfront-fmc` stack output (optional) |
-| `FIREFLY_UI_BUCKET` | From secrets |
+| `FIREFLY_FMC_URL` | `firefly-cloudfront-fmc` stack output (optional) |
+| `FIREFLY_FMC_BUCKET` | From secrets |
 | `FIREFLY_COGNITO_USER_POOL_ID` | `firefly-cognito` stack output (optional) |
 | `FIREFLY_COGNITO_CLIENT_ID` | `firefly-cognito` stack output (optional) |
 | `FIREFLY_TEST_USER_EMAIL` | Generated at runtime (transient) |

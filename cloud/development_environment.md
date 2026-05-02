@@ -168,8 +168,8 @@ pip install -r tests/requirements.txt
 |---|---|---|
 | `FIREFLY_API_URL` | No | API base URL (defaults to the production URL if not set) |
 | `FIREFLY_FIRMWARE_BUCKET` | For upload tests | Private S3 firmware bucket name |
-| `FIREFLY_UI_URL` | For UI and CORS tests | Base URL of the firmware management UI (e.g. `https://ui.example.com`) |
-| `FIREFLY_UI_BUCKET` | For UI S3 tests | Name of the private S3 bucket serving the UI static files |
+| `FIREFLY_FMC_URL` | For UI and CORS tests | Base URL of the FMC (e.g. `https://fmc.example.com`) |
+| `FIREFLY_FMC_BUCKET` | For UI S3 tests | Name of the private S3 bucket serving the FMC static files |
 | `FIREFLY_COGNITO_USER_POOL_ID` | For auth tests | Cognito User Pool ID |
 | `FIREFLY_COGNITO_CLIENT_ID` | For auth tests | Cognito App Client ID |
 | `FIREFLY_TEST_USER_EMAIL` | For auth tests | Email of an existing Cognito test user. |
