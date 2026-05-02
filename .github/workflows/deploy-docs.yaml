@@ -71,6 +71,16 @@ jobs:
           done
           if [ "$missing" -eq 1 ]; then exit 1; fi
 
+      - name: Download OpenAPI specs
+        run: |
+          mkdir -p public/openapi
+          curl -sSf "https://raw.githubusercontent.com/BrentIO/FireFly-Controller/main/Controller/openapi.yaml" \
+            -o public/openapi/controller.yaml
+          curl -sSf "https://raw.githubusercontent.com/BrentIO/FireFly-Controller/main/Hardware-Registration-and-Configuration/openapi.yaml" \
+            -o public/openapi/hardware-registration.yaml
+          curl -sSf "https://raw.githubusercontent.com/BrentIO/FireFly-Cloud/main/docs/openapi.yaml" \
+            -o public/openapi/cloud.yaml
+
       - name: Copy static assets to public for direct URL access
         run: |
           find . \( -name "*.svg" -o -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.gif" -o -name "*.webp" \) \
